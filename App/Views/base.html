@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.png">
+
+    <title>Vide Grenier En Ligne | {% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Theme CSS -->
+    <link href="/style/main.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/font-circle-video.css" rel="stylesheet">
+
+    <!-- font-family: 'Hind', sans-serif; -->
+    <link href='https://fonts.googleapis.com/css?family=Hind:400,300,500,600,700|Hind+Guntur:300,400,500,700' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+<!-- logo, menu, search, avatar -->
+<div class="container-fluid ">
+    <div class="row">
+        <div class="navbar-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-3 visible-xs">
+                        <a href="#" class="btn-menu-toggle"><i class="cv cvicon-cv-menu"></i></a>
+                    </div>
+                    <div class="col-lg-1 col-sm-2 col-xs-6">
+                        <a class="navbar-brand" href="/">
+                            <img src="/images/logo.png" alt="Vide Grenier en ligne" class="logo" />
+                            <span>Vide Grenier en ligne</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-sm-10 hidden-xs">
+                        <ul class="list-inline menu">
+                            <li class="color-active"><a href="/product">Déposer une annonce</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-6 col-sm-8 col-xs-3">
+                        <!--<form action="search.html" method="post">
+                            <div class="topsearch">
+                                <i class="cv cvicon-cv-cancel topsearch-close"></i>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="sizing-addon2"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Rechercher..."
+                                           aria-describedby="sizing-addon2">
+                                </div>
+                            </div>
+                        </form>-->
+                    </div>
+
+                    {% if user is not null %}
+
+                    <div class="col-lg-2 col-sm-4 hidden-xs">
+                        <div class="selectuser pull-left">
+                            <div class="btn-group pull-right dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    {{ user.username }}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/account">Mon compte</a></li>
+                                    <li><a href="/logout">Déconnexion</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    {% else %}
+                    <div class="col-lg-2 col-sm-12 hidden-xs">
+                        <div class="loginsignup pull-right">
+                            <a href="/login">Connexion</a> . <a href="/register">Inscription</a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    {%endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /logo -->
+
+<div class="mobile-menu">
+    <div class="mobile-menu-head">
+        <a href="#" class="mobile-menu-close"></a>
+        <a class="navbar-brand" href="index.html">
+            <img src="images/logo.png" alt="Vide Grenier en ligne name" class="logo" />
+            <span>Vide Grenier en ligne</span>
+        </a>
+    </div>
+    <div class="mobile-menu-content">
+        <a href="/product" class="btn mobile-menu-upload">
+            <span>Déposer une annonce</span>
+        </a>
+
+        <div class="mobile-menu-list">
+            <ul>
+                <li>
+                    <a href="/">
+                        <i class="cv cvicon-cv-playlist"></i>
+                        <p>Accueil</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/account">
+                        <i class="cv cvicon-cv-play-circle"></i>
+                        <p>Mon compte</p>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <a href="#" class="btn mobile-menu-logout">Déconnexion</a>
+    </div>
+</div>
+
+    {% block body %}
+    {% endblock %}
+    <footer>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="container padding-def">
+                    <div class="col-lg-1  col-sm-2 col-xs-12 footer-logo">
+                        <!--<a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="Project name" class="logo" /></a>-->
+                        <a class="navbar-brand" href="index.html">
+                            <img src="/images/logo.png" alt="Vide Grenier en ligne" class="logo" />
+                            <span>Vide Grenier en ligne</span>
+                        </a>
+                    </div>
+                    <div class="col-lg-7 col-sm-6 col-xs-12">
+                        <div class="f-copy">
+                            <ul class="list-inline">
+                                <li><a href="#">Politique relative aux cookies</a></li>
+                                <li><a href="#">Politique de confidentialité</a></li>
+                                <li>Copyright 2020 <a href="https://www.cesi.fr" class="hidden-xs">CESI</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-offset-1 col-lg-3 col-sm-4 col-xs-12">
+                        <div class="f-last-line">
+                            <div class="f-icon pull-left">
+                                <a href="#"><i class="fa fa-facebook-square"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="delimiter visible-xs"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- /footer -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
+    <script src="/js/custom.js"></script>
+
+    {% block javascript %}
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+<div class="content-wrapper upload-page edit-page">
+
+    <!-- channel -->
+    <div class="container-fluid add-header">
+        <div class="row">
+            <h1>
+                Que souhaitez-vous donner ?
+            </h1>
+        </div>
+    </div>
+    <!-- ///channel -->
+
+    <div class="container mt-30">
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="u-form">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="e1">Titre</label>
+                                    <input type="text" name="name" class="form-control" id="e1"
+                                           placeholder="Jeu de cartes (rare)">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="e2">Description</label>
+                                    <textarea class="form-control" name="description" id="e2" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="e2">Ville</label>
+                                    <input class="form-control cityAutoComplete" type="text" autocomplete="off"/>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="e3">Image</label>
+                                    <input type="file" class="form-control" name="picture" id="e3" rows="3"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="u-area mt-small">
+                        <form action="#" method="post">
+                            <button name="submit" class="btn btn-primary u-btn">Valider</button>
+                        </form>
+                    </div>
+                    <div class="u-terms">
+                        <p>En soumettant votre article vous acceptez les <a href="#">conditions générales</a> de Vide Grenier en
+                            ligne.</p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock body %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $('.cityAutoComplete').autoComplete({
+            resolver: 'custom',
+            events: {
+                search: function (qry, callback) {
+                    // let's do a custom ajax call
+                    $.ajax(
+                        '/api/cities',
+                        {
+                            data: { 'query': qry}
+                        }
+                    ).done(function (res) {
+                        callback(res)
+                    });
+                }
+            }
+        });
+    </script>
+{% endblock %}

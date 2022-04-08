@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<div class="content-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="content-block head-div">
+                    <div class="cb-header">
+                        <div class="row">
+                            <div class="col-lg-10 col-sm-10 col-xs-8">
+                                <ul class="list-inline">
+                                    <li>
+                                        <a href="#" class="color-active">
+                                            <span class="visible-xs">À la une</span>
+                                            <span class="hidden-xs">À la une</span>
+                                        </a>
+                                    </li>
+                                    <li><a href="#">Autour de moi</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-2 col-sm-2 col-xs-4">
+                                <div class="btn-group pull-right bg-clean">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Filtrer par <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a onclick="getProductsAndRender('views')"><i
+                                                class="cv cvicon-cv-calender"></i>
+                                            Popularité</a></li>
+                                        <li><a onclick="getProductsAndRender('date')"><i
+                                                class="cv cvicon-cv-calender"></i>
+                                            Récent</a></li>
+                                    </ul>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cb-content">
+                        <div class="row" id="articlelist">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        function getProductsAndRender(option = ''){
+            $.ajax({
+                url: "/api/products" + '?sort=' + option,
+            }).done(function(result) {
+                $('#articlelist').empty();
+                for(let i = 0; i < result.length; i++){
+                    renderProduct(result[i])
+                }
+            });
+        }
+
+        function renderProduct($product){
+             $('<div class="col-lg-4 col-sm-6 articleitem" id="article-pattern">' +
+                '                                <div class="b-article">' +
+                '                                    <div class="v-img">' +
+                '                                        <a href="/product/'+ $product.id + '">' +
+                '                                            <img src="/storage/'+ $product.picture +'" alt=""></a>' +
+                '                                    </div>' +
+                '                                    <div class="v-desc">' +
+                '                                        <a href="/product/'+ $product.id + '">'+ $product.name+'</a>' +
+                '                                    </div>' +
+                '                                    <p>'+ $product.description.slice(0, 20) + '...</p>' +
+                '                                    <div class="v-views">' +
+                '                                        '+$product.views+' vues' +
+                '                                    </div>' +
+                '                                </div>' +
+                '</div>')
+             .appendTo($('#articlelist'));
+        }
+
+        $( document ).ready(function() {
+            getProductsAndRender();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+
+<div class="content-wrapper single-article mt-40">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-xs-12 col-sm-12">
+                <div class="preview-article">
+                    <img
+                            src="{{ ('/storage/' ~ article.picture) }}"/>
+
+                </div>
+                <h1><a href="#">{{article.name}}</a></h1>
+
+
+                <div class="author">
+                    <div class="author-head">
+                        <div class="sv-name">
+                            <div><a href="#">{{ article.username }}</a></div>
+                        </div>
+                    </div>
+
+                    <div class="author-border"></div>
+                    <div class="sv-views">
+                        <div class="sv-views-count">
+                            {{ article.views }} vues
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="info">
+                    <div class="info-content">
+                        <h4>Description:</h4>
+                        <p>{{article.description}}</p>
+                    </div>
+                    <div class="u-area mt-small">
+
+                    <a name="submit" href="mailto:{{article.email}}" class="btn btn-primary u-btn">Contacter {{article
+                        .username}}</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- right column -->
+            <div class="col-lg-4 col-xs-12 col-sm-12 hidden-xs">
+                <p>Vous aimerez peut-être...</p>
+                <div class="list">
+                    <div class="h-article row">
+                        {% for suggestion in suggestions %}
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="v-desc">
+                                <a href="{{ ('/product/' ~ suggestion.id) }}">{{suggestion.name}}</a>
+                            </div>
+
+                            <div class="v-views">
+                                {{ suggestion.views}} vues
+                            </div>
+
+                            <hr>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- END up next -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

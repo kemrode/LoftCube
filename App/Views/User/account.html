@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Mon compte {% endblock %}
+
+{% block body %}
+
+<div class="channel">
+
+    <div class="container-fluid account-header">
+        <div class="row">
+            <h1>
+                {{ user.username }}
+            </h1>
+
+        </div>
+    </div>
+
+
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="channel-details">
+                        <div class="row">
+                            <div class="col-lg-10 col-lg-offset-2 col-xs-12">
+                                <div class="c-details">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Featured Videos -->
+                    <div class="content-block">
+                        <div class="cb-header">
+                            <div class="row">
+                                <div class="col-lg-8 col-xs-6">
+                                    <div class="btn-group bg-clean">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Plus récent <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#"><i class="cv cvicon-cv-relevant"></i> Popularité</a></li>
+                                            <li><a href="#"><i class="cv cvicon-cv-calender"></i> Plus récent</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cb-content articlelist">
+                            <div class="row">
+                                {% for article in articles %}
+                                <div class=" col-lg-3 col-sm-6 articleitem">
+                                    <div class="b-article">
+                                        <div class="v-img">
+                                            <a
+                                                    href="{{ ('/product/' ~ article.id) }}"><img
+                                                    src="{{ ('/storage/' ~ article.picture) }}" alt=""></a>
+                                        </div>
+                                        <div class="v-desc">
+                                            <a href="{{ ('/product/' ~ article.id) }}">{{ article.name }}</a>
+                                        </div>
+                                        <div class="v-views">
+                                            {{article.views}} vues
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Featured Videos -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
