@@ -34,10 +34,15 @@ class Articles extends Model {
             case '':
                 break;
         }
+        try{
+            $stmt = $db->query($query);
 
-        $stmt = $db->query($query);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch(\Exception $e){
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
     /**
@@ -54,10 +59,15 @@ class Articles extends Model {
             INNER JOIN users ON articles.user_id = users.id
             WHERE articles.id = ? 
             LIMIT 1');
+        try{
+            $stmt->execute([$id]);
 
-        $stmt->execute([$id]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch(\Exception $e){
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
     /**
@@ -73,8 +83,13 @@ class Articles extends Model {
             UPDATE articles 
             SET articles.views = articles.views + 1
             WHERE articles.id = ?');
+        try{
+            $stmt->execute([$id]);
+        } catch(\Exception $e){
 
-        $stmt->execute([$id]);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
     /**
@@ -90,10 +105,15 @@ class Articles extends Model {
             SELECT *, articles.id as id FROM articles
             LEFT JOIN users ON articles.user_id = users.id
             WHERE articles.user_id = ?');
+        try{
+            $stmt->execute([$id]);
 
-        $stmt->execute([$id]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch(\Exception $e){
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
     /**
@@ -109,10 +129,15 @@ class Articles extends Model {
             SELECT *, articles.id as id FROM articles
             INNER JOIN users ON articles.user_id = users.id
             ORDER BY published_date DESC LIMIT 10');
+        try{
+            $stmt->execute();
 
-        $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch(\Exception $e){
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
 
@@ -134,10 +159,15 @@ class Articles extends Model {
         $stmt->bindParam(':description', $data['description']);
         $stmt->bindParam(':published_date', $published_date);
         $stmt->bindParam(':user_id', $data['user_id']);
+        try{
+            $stmt->execute();
 
-        $stmt->execute();
+            return $db->lastInsertId();
+        } catch(\Exception $e){
 
-        return $db->lastInsertId();
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
     public static function attachPicture($articleId, $pictureName){
@@ -148,11 +178,12 @@ class Articles extends Model {
         $stmt->bindParam(':picture', $pictureName);
         $stmt->bindParam(':articleid', $articleId);
 
+        try{
+            $stmt->execute();
+        } catch(\Exception $e){
 
-        $stmt->execute();
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
-
-
-
-
 }

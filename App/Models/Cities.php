@@ -21,9 +21,14 @@ class Cities extends Model {
         $query = $str . '%';
 
         $stmt->bindParam(':query', $query);
+        try{
+            $stmt->execute();
 
-        $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_COLUMN, 0);
+        } catch(\Exception $e){
 
-        return $stmt->fetchAll(\PDO::FETCH_COLUMN, 0);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 }
