@@ -20,7 +20,12 @@ class Home extends \Core\Controller
      */
     public function indexAction()
     {
+        try{
+            View::renderTemplate('Home/index.html', []);
+        } catch(\Exception $e){
 
-        View::renderTemplate('Home/index.html', []);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 }

@@ -20,12 +20,18 @@ class Api extends \Core\Controller
      */
     public function ProductsAction()
     {
-        $query = $_GET['sort'];
+        try{
+            $query = $_GET['sort'];
 
-        $articles = Articles::getAll($query);
+            $articles = Articles::getAll($query);
 
-        header('Content-Type: application/json');
-        echo json_encode($articles);
+            header('Content-Type: application/json');
+            echo json_encode($articles);
+        } catch(\Exception $e){
+
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
     /**
@@ -34,10 +40,15 @@ class Api extends \Core\Controller
      * @throws Exception
      */
     public function CitiesAction(){
+        try{
+            $cities = Cities::search($_GET['query']);
 
-        $cities = Cities::search($_GET['query']);
+            header('Content-Type: application/json');
+            echo json_encode($cities);
+        } catch(\Exception $e){
 
-        header('Content-Type: application/json');
-        echo json_encode($cities);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 }

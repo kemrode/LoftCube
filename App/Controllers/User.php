@@ -24,14 +24,20 @@ class User extends \Core\Controller
     public function loginAction()
     {
         if(isset($_POST['submit'])){
-            $f = $_POST;
+            try{
+                $f = $_POST;
 
-            // TODO: Validation
+                // TODO: Validation
 
-            $this->login($f);
+                $this->login($f);
 
-            // Si login OK, redirige vers le compte
-            header('Location: /account');
+                // Si login OK, redirige vers le compte
+                header('Location: /account');
+            } catch(\Exception $e){
+
+                echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+            }
         }
 
         View::renderTemplate('User/login.html');
@@ -43,16 +49,26 @@ class User extends \Core\Controller
     public function registerAction()
     {
         if(isset($_POST['submit'])){
-            $f = $_POST;
+            try {
+                $f = $_POST;
 
-            if($f['password'] !== $f['password-check']){
-                // TODO: Gestion d'erreur côté utilisateur
+                if($f['password'] !== $f['password-check']){
+
+
+                    // TODO: Gestion d'erreur côté utilisateur
+
+                }
+
+                // validation
+
+                $this->register($f);
+                // TODO: Rappeler la fonction de login pour connecter l'utilisateur
+
+            } catch(\Exception $e){
+
+                echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
             }
-
-            // validation
-
-            $this->register($f);
-            // TODO: Rappeler la fonction de login pour connecter l'utilisateur
         }
 
         View::renderTemplate('User/register.html');
@@ -63,11 +79,17 @@ class User extends \Core\Controller
      */
     public function accountAction()
     {
-        $articles = Articles::getByUser($_SESSION['user']['id']);
+        try{
+            $articles = Articles::getByUser($_SESSION['user']['id']);
+        } catch(\Exception $e){
 
-        View::renderTemplate('User/account.html', [
-            'articles' => $articles
-        ]);
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
+            View::renderTemplate('User/account.html', [
+                'articles' => $articles
+            ]);
+
     }
 
     /*
@@ -133,29 +155,34 @@ class User extends \Core\Controller
      * @since 1.0.2
      */
     public function logoutAction() {
+        try{
+            /*
+            if (isset($_COOKIE[$cookie])){
+                // TODO: Delete the users remember me cookie if one has been stored.
+                // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L148
+            }*/
+            // Destroy all data registered to the session.
 
-        /*
-        if (isset($_COOKIE[$cookie])){
-            // TODO: Delete the users remember me cookie if one has been stored.
-            // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L148
-        }*/
-        // Destroy all data registered to the session.
+            $_SESSION = array();
 
-        $_SESSION = array();
+            if (ini_get("session.use_cookies")) {
+                $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 42000,
+                    $params["path"], $params["domain"],
+                    $params["secure"], $params["httponly"]
+                );
+            }
 
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
+            session_destroy();
+
+            header ("Location: /");
+
+            return true;
+        } catch(\Exception $e){
+
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
         }
-
-        session_destroy();
-
-        header ("Location: /");
-
-        return true;
     }
 
 }
