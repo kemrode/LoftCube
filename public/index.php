@@ -6,6 +6,8 @@
  * PHP version 7.0
  */
 
+use Core\View;
+
 session_start();
 
 /**
@@ -47,5 +49,10 @@ try {
         case 'You must be logged in':
             header('Location: /login');
             break;
+        case 'No route matched.':
+            View::renderTemplate('404.html');
+            break;
+        default:
+            View::renderTemplate('500.html');
     }
 }
