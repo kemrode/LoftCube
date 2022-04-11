@@ -11,6 +11,7 @@
 
 .login-wraper{
   position: relative;
+  display: contents;
   .login-window {
     position: absolute;
     width: 570px;
@@ -153,6 +154,7 @@
   .login-wraper {
     .login-window {
       position: relative;
+      display: contents;
       width: auto;
       top: 0;
       left: 0;
