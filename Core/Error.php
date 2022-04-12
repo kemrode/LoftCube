@@ -41,9 +41,6 @@ class Error
 
         //todo trouver comment faire en sorte de récupérer le code erreur de $exception
         $trace = $exception->getTrace();
-
-var_dump(       $trace
-    );
         if ($code != 404) {
             $code = 500;
         }

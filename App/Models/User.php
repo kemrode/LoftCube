@@ -40,9 +40,8 @@ class User extends Model {
     public static function getByLogin($login)
     {
         $db = static::getDB();
-
         $stmt = $db->prepare("
-            SELECT * FROM users WHERE ( users.email = :email) LIMIT 1
+            SELECT id, username ,email,password,salt  FROM users WHERE ( users.email = 'toto@oto.fr') LIMIT 1
         ");
 
         $stmt->bindParam(':email', $login);
@@ -51,6 +50,7 @@ class User extends Model {
             $stmt->execute();
 
             return $stmt->fetch(\PDO::FETCH_ASSOC);
+
         } catch(\Exception $e){
 
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
