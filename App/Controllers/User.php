@@ -28,6 +28,7 @@ class User extends \Core\Controller
 
             // TODO: Validation
             setcookie('visitorLogged',true,time()+86400);
+            //RAJOUTER D'AUTRES COOKIES ?
 
             $this->login($f);
 
