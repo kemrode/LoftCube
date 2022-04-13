@@ -143,7 +143,7 @@ class User extends \Core\Controller
                 }
 
             }else{
-                echo "ici";die();
+                //echo "ici";die();
             }
             // TODO: Create a remember me cookie if the user has selected the option
             // to remained logged in on the login form.
