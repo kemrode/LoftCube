@@ -1694,7 +1694,7 @@ footer {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  align-items: center; }
+  align-items: flex-start; }
   .login-wraper .login-window {
     width: 570px;
     top: 50%;
