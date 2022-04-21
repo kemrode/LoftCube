@@ -1,1 +1,1 @@
-{"version":1,"defects":{"Warning":6},"times":{"Warning":0.003}}
+{"version":1,"defects":{"Warning":6,"Tests\\Core\\ControllerTest::testcall":4,"Tests\\Core\\ControllerTest::test__call":4},"times":{"Warning":0.152,"Tests\\Core\\ControllerTest::testcall":0.003,"Tests\\Core\\ControllerTest::test__call":0.003}}
