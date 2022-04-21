@@ -188,6 +188,8 @@ class Router
     protected function removeQueryStringVariables($url)
     {
         if ($url != '') {
+            $url = str_replace("q=/", "", $url);
+
             $parts = explode('&', $url, 2);
 
             if (strpos($parts[0], '=') === false) {

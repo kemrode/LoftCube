@@ -1,9 +1,15 @@
 {
     "require": {
+      "php": ">=8.1",
         "twig/twig": "~3.0",
       "ext-pdo": "*",
-      "ext-json": "*"
+      "ext-json": "*",
+        "phpunit/phpunit-selenium": "*"
     },
+  "require-dev": {
+    "phpunit/php-code-coverage": "^9.2",
+    "phpunit/phpunit": "^9.5"
+  },
     "autoload": {
         "psr-4": {
             "Core\\": "Core/",

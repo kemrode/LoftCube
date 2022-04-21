@@ -25,24 +25,37 @@ class User extends Model {
         $stmt->bindParam(':email', $data['email']);
         $stmt->bindParam(':password', $data['password']);
         $stmt->bindParam(':salt', $data['salt']);
+        try {
 
-        $stmt->execute();
+            $stmt->execute();
 
-        return $db->lastInsertId();
+            return $db->lastInsertId();
+        } catch(\Exception $e){
+
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
     public static function getByLogin($login)
     {
         $db = static::getDB();
-
         $stmt = $db->prepare("
-            SELECT * FROM users WHERE ( users.email = :email) LIMIT 1
+            SELECT id, username ,email,password,salt  FROM users WHERE ( users.email = :email) LIMIT 1
         ");
 
         $stmt->bindParam(':email', $login);
-        $stmt->execute();
+        try {
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        } catch(\Exception $e){
+
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
 
@@ -52,14 +65,22 @@ class User extends Model {
      * @return string|boolean
      * @throws Exception
      */
+    //TODO verrifier l'utilité de la fonction login()
     public static function login() {
         $db = static::getDB();
 
         $stmt = $db->prepare('SELECT * FROM articles WHERE articles.id = ? LIMIT 1');
+        try {
 
-        $stmt->execute([$id]);
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $stmt->execute([$id]);
+
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch(\Exception $e){
+
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
     }
 
 
