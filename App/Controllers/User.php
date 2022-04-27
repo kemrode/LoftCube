@@ -32,7 +32,6 @@ class User extends \Core\Controller
             //RAJOUTER D'AUTRES COOKIES ?
 
                 $this->login($f);
-
                 // Si login OK, redirige vers le compte
                 header('Location: /account');
             } catch(\Exception $e){
@@ -50,30 +49,36 @@ class User extends \Core\Controller
      */
     public function registerAction()
     {
+
         if(isset($_POST['submit'])){
             try {
                 $f = $_POST;
-
-                if($f['password'] !== $f['password-check']){
-
-
+                if($f['password'] !== $f['password-check']) {
                     // TODO: Gestion d'erreur côté utilisateur
-
+                    //View::renderTemplate('User/register.html?code=');
+                    return null;
                 }
-
                 // validation
-
                 $this->register($f);
                 // TODO: Rappeler la fonction de login pour connecter l'utilisateur
+                $data = array(
+                    "email" => $f['email'],
+                    "password" => $f['password'],
+                );
+                $this->login($data);
+
+                header('Location: /account');
+
 
             } catch(\Exception $e){
-
                 echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
 
             }
+        }else{
+            View::renderTemplate('User/register.html');
+
         }
 
-        View::renderTemplate('User/register.html');
     }
 
     /**
@@ -121,6 +126,7 @@ class User extends \Core\Controller
 
 
     private function login($data){
+
         try {
             if(isset($data['email']) &&( isset($data['password'])
                  //   && strlen($data['password'])>7
