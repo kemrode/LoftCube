@@ -107,7 +107,7 @@
     border-radius: 2px;
     position: relative;
     img {
-      object-fit: cover;
+      object-fit: contain;
       height: 100%;
       width: 100%;
     }
