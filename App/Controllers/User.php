@@ -53,11 +53,14 @@ class User extends \Core\Controller
         if(isset($_POST['submit'])){
             try {
                 $f = $_POST;
+
                 if($f['password'] !== $f['password-check']) {
                     // TODO: Gestion d'erreur côté utilisateur
                     //View::renderTemplate('User/register.html?code=');
+
                     return null;
                 }
+
                 // validation
                 $this->register($f);
                 // TODO: Rappeler la fonction de login pour connecter l'utilisateur
@@ -102,8 +105,12 @@ class User extends \Core\Controller
     /*
      * Fonction privée pour enregister un utilisateur
      */
+
+
+
     private function register($data)
     {
+
         try {
             // Generate a salt, which will be applied to the during the password
             // hashing process.
@@ -115,12 +122,13 @@ class User extends \Core\Controller
                 "password" => Hash::generate($data['password'], $salt),
                 "salt" => $salt
             ]);
-
             return $userID;
+
 
         } catch (Exception $ex) {
             // TODO : Set flash if error : utiliser la fonction en dessous
             /* Utility\Flash::danger($ex->getMessage());*/
+
         }
     }
 

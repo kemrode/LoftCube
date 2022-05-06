@@ -22,8 +22,12 @@ class Error
      */
     public static function errorHandler($level, $message, $file, $line)
     {
+
         if (error_reporting() !== 0) {  // to keep the @ operator working
             throw new \ErrorException($message, 0, $level, $file, $line);
+
+
+
         }
     }
 
@@ -48,7 +52,7 @@ class Error
 
         if (\App\Config::SHOW_ERRORS) {
             View::renderTemplate("$code.html");
- } else {
+        } else {
             $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.txt';
             ini_set('error_log', $log);
 
