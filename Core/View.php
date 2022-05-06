@@ -20,6 +20,9 @@ class View
      */
     public static function render($view, $args = [])
     {
+
+
+
         extract($args, EXTR_SKIP);
 
         $file = dirname(__DIR__) . "/App/Views/$view";  // relative to Core directory
@@ -41,12 +44,15 @@ class View
      */
     public static function renderTemplate($template, $args = [])
     {
+
         static $twig = null;
 
         if ($twig === null) {
             $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/App/Views');
             $twig = new \Twig\Environment($loader, ['debug' => true,]);
             $twig->addExtension(new \Twig\Extension\DebugExtension());
+
+
         }
 
         echo $twig->render($template, View::setDefaultVariables($args));
@@ -64,5 +70,8 @@ class View
         $args["user"] = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         return $args;
+
     }
 }
+
+
