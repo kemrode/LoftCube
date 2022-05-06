@@ -1,0 +1,12 @@
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         syntaxCheck="false">
+    <testsuites>
+        <testsuite name="Tests">
+            <directory suffix=".php">Tests</directory>
+            <directory suffix=".php">Tests/App</directory>
+            <directory suffix=".php">Tests/Core</directory>
+            <directory suffix=".php">Tests/Models</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
