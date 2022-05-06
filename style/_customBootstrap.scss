@@ -1,0 +1,5 @@
+@import "mixin";
+
+.addForm {
+  @include display-flex-column-center();
+}

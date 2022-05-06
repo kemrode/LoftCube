@@ -197,14 +197,9 @@
 
   .v-desc-global {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
     flex-wrap: wrap;
-    & p {
-      justify-content: start;
-      color: $c-caption;
-      font-weight: 300;
-      padding-top: $space-sm;
-    }
   }
 
   .v-views {

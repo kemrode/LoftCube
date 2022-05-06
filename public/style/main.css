@@ -847,13 +847,9 @@ video {
     padding-top: 25px; }
   .b-article .v-desc-global {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
     flex-wrap: wrap; }
-    .b-article .v-desc-global p {
-      justify-content: start;
-      color: #343434;
-      font-weight: 300;
-      padding-top: 30px; }
   .b-article .v-views {
     font-size: 15px;
     color: #7e7e7e;
@@ -2529,3 +2525,29 @@ footer {
 /*
 * Content Upload END
 */
+.vertical-align {
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%); }
+
+.horizontal-align {
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%); }
+
+.vert-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%; }
+  .vert-wrapper .vert {
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle; }
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
