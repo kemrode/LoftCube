@@ -298,6 +298,13 @@
 
   .info {
     margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    @media only screen and (max-width: 767px) {
+      margin-bottom: 20px;
+    }
     h4 {
       margin: 20px 0 3px 0;
       padding: 0;

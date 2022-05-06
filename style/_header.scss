@@ -127,6 +127,12 @@ ul.menu {
 }
 .navbar-container {
   @media only screen and(max-width: 767px) {
+    height: auto;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background-color: white;
+    z-index: 2;
     min-height: 90px;
     padding-bottom: 0 !important;
     align-items: center;
@@ -246,7 +252,6 @@ ul.menu {
 }
 
 .navbar-container {
-  position: relative;
   height: 70px;
   border-bottom: solid 1px $c-divider;
   &.single {
