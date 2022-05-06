@@ -1,6 +1,7 @@
 /*
 * Content Single Video
 */
+@import "mixin";
 .single-article {
 
   .h-clear {
@@ -621,6 +622,7 @@
   }
 
   .b-article {
+    @include display-flex-column-center();
     .v-img {
       img {
         width: 100%;

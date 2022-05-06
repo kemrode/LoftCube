@@ -1,7 +1,7 @@
 /*
 * Content Index
 */
-
+@import "mixin";
 .content-wrapper {
   background-color: $c-bg;
 }
@@ -102,6 +102,7 @@
 }
 
 .b-article {
+  @include display-flex-column-center();
   .v-img {
     height: 200px;
     border-radius: 2px;
@@ -192,6 +193,18 @@
     color: $c-caption;
     font-weight: 500;
     padding-top: $space-sms;
+  }
+
+  .v-desc-global {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    & p {
+      justify-content: start;
+      color: $c-caption;
+      font-weight: 300;
+      padding-top: $space-sm;
+    }
   }
 
   .v-views {
@@ -570,7 +583,8 @@
 }
 
 .cb-content {
-    width: 130% !important; // FIX INTERNET EXPLORER ;
+
+    //width: 130% !important; // FIX INTERNET EXPLORER ;
 }
 
 /*
