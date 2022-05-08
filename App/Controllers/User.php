@@ -27,9 +27,9 @@ class User extends \Core\Controller
             try{
                 $f = $_POST;
 
-            // TODO: Validation
-            setcookie('visitorLogged',true,time()+86400);
-            //RAJOUTER D'AUTRES COOKIES ?
+                // TODO: Validation
+                setcookie('visitorLogged',true,time()+86400);
+                //RAJOUTER D'AUTRES COOKIES ?
 
                 $this->login($f);
                 // Si login OK, redirige vers le compte
@@ -63,7 +63,6 @@ class User extends \Core\Controller
 
                 // validation
                 $this->register($f);
-                // TODO: Rappeler la fonction de login pour connecter l'utilisateur
                 $data = array(
                     "email" => $f['email'],
                     "password" => $f['password'],
@@ -122,6 +121,10 @@ class User extends \Core\Controller
                 "password" => Hash::generate($data['password'], $salt),
                 "salt" => $salt
             ]);
+            $data = [
+                'email'=>$data['email'],
+                "password" =>$data['password']
+            ];
             return $userID;
 
 
@@ -130,6 +133,8 @@ class User extends \Core\Controller
             /* Utility\Flash::danger($ex->getMessage());*/
 
         }
+        $this->login($data);
+
     }
 
 
@@ -137,14 +142,16 @@ class User extends \Core\Controller
 
         try {
             if(isset($data['email']) &&( isset($data['password'])
-                 //   && strlen($data['password'])>7
+                    //   && strlen($data['password'])>7
                 ) ){
                 $email = $data['email'];
                 //regex de vérification des emails
                 $regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
                 $email = (preg_match($regex, $email))?$email:"invalid email";
-                //si c'est pas un email : erreur email todo
+
                 if($email == 'invalid email'){
+
+                    //todo si c'est pas un email : erreur email
                     throw new Exception('TODO');
                 }
                 $user = \App\Models\User::getByLogin($data['email']);
@@ -154,6 +161,7 @@ class User extends \Core\Controller
                         'username' => $user['username']
                     );
                 }else{
+                    View::renderenderrTemplate('User/login.html');
                     return false;
 
                 }

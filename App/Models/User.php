@@ -21,7 +21,6 @@ class User extends Model {
         $db = static::getDB();
 
         $stmt = $db->prepare('INSERT INTO users(username, email, password, salt) VALUES (:username, :email, :password,:salt)');
-        var_dump("ici"); die();
         $stmt->bindParam(':username', $data['username']);
         $stmt->bindParam(':email', $data['email']);
         $stmt->bindParam(':password', $data['password']);
