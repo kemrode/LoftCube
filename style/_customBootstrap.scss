@@ -10,3 +10,23 @@
     padding-right: 0px;
   }
 }
+
+.col-xs-3 {
+  @media only screen and(max-width: 767px){
+    width: 10%;
+  }
+}
+.col-xs-6 {
+  @media only screen and(max-width: 767px){
+    width: 70%;
+  }
+}
+
+.navbar-brand {
+    @media only screen and(max-width: 767px){
+      padding: 0px;
+      & span {
+        margin-left: 5px;
+      }
+    }
+}
