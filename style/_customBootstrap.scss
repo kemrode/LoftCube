@@ -3,3 +3,10 @@
 .addForm {
   @include display-flex-column-center();
 }
+
+.container-fluid {
+  @media only screen and(max-width: 767px) {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}

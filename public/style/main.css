@@ -2566,3 +2566,8 @@ footer {
   flex-direction: column;
   justify-content: center;
   align-items: center; }
+
+@media only screen and (max-width: 767px) {
+  .container-fluid {
+    padding-left: 0px;
+    padding-right: 0px; } }
