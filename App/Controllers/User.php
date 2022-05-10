@@ -23,12 +23,52 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
+
+        if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
+            try{
+                $f=[
+                    'email'=>$_COOKIE['email'],
+                    'password'=>$_COOKIE['password'],
+                ];
+
+                $this->login($f);
+                header('Location: /account');
+
+
+            }catch (Exception $e){
+
+            }
+        }
+
+        if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
+            try{
+                $f=[
+                    'email'=>$_COOKIE['email'],
+                    'password'=>$_COOKIE['password'],
+                ];
+
+                $this->login($f);
+                header('Location: /account');
+
+
+            }catch (Exception $e){
+
+            }
+        }
         if(isset($_POST['submit'])){
             try{
                 $f = $_POST;
+
+
                 // TODO: Validation
-                setcookie('visitorLogged',true,time()+86400);
-                //RAJOUTER D'AUTRES COOKIES ?
+                if(isset($_POST['checkbox'])&&$_POST['checkbox'] == true){
+                    setcookie('visitorLogged',true,time()+86400);
+                    //RAJOUTER D'AUTRES COOKIES ?
+                    setcookie("email",$f['email'],time()+86400);
+                    setcookie("password",$f['password'],time()+86400);
+
+                }
+
                 $this->login($f);
                 // Si login OK, redirige vers le compte
                 header('Location: /account');
@@ -48,8 +88,6 @@ class User extends \Core\Controller
             try {
                 $f = $_POST;
                 if($f['password'] !== $f['password-check']) {
-                    // TODO: Gestion d'erreur côté utilisateur
-                    //View::renderTemplate('User/register.html?code=');
                     return null;
                 }
                 // validation
@@ -123,7 +161,6 @@ class User extends \Core\Controller
                 $regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
                 $email = (preg_match($regex, $email))?$email:"invalid email";
                 if($email == 'invalid email'){
-                    //todo si c'est pas un email : erreur email
                     header('Location: /login?cod=errem');
                     die();
                     return false;
@@ -142,9 +179,7 @@ class User extends \Core\Controller
             }else{
                 header('Location: /login?cod=errlog');
                 die();            }
-            // TODO: Create a remember me cookie if the user has selected the option
-            // to remained logged in on the login form.
-            // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L86
+
             return true;
         } catch (Exception $ex) {
             header('Location: /login?cod=errlog');
@@ -162,11 +197,13 @@ class User extends \Core\Controller
      */
     public function logoutAction() {
         try{
-            /*
-            if (isset($_COOKIE[$cookie])){
-                // TODO: Delete the users remember me cookie if one has been stored.
-                // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L148
-            }*/
+
+            if (isset($_COOKIE)){
+                setcookie("email","", time()-3600);
+                unset($_COOKIE['email']);
+                setcookie("password","", time()-3600);
+                unset($_COOKIE['password']);
+            }
             // Destroy all data registered to the session.
 
             $_SESSION = array();
