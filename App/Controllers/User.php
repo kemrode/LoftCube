@@ -58,17 +58,11 @@ class User extends \Core\Controller
         if(isset($_POST['submit'])){
             try{
                 $f = $_POST;
-
-
-                // TODO: Validation
                 if(isset($_POST['checkbox'])&&$_POST['checkbox'] == true){
                     setcookie('visitorLogged',true,time()+86400);
-                    //RAJOUTER D'AUTRES COOKIES ?
                     setcookie("email",$f['email'],time()+86400);
                     setcookie("password",$f['password'],time()+86400);
-
                 }
-
                 $this->login($f);
                 // Si login OK, redirige vers le compte
                 header('Location: /account');
@@ -120,7 +114,6 @@ class User extends \Core\Controller
         View::renderTemplate('User/account.html', [
             'articles' => $articles
         ]);
-
     }
 
     /*
@@ -151,7 +144,6 @@ class User extends \Core\Controller
     }
 
     private function login($data){
-
         try {
             if(isset($data['email']) &&( isset($data['password'])
                     //   && strlen($data['password'])>7
@@ -178,8 +170,8 @@ class User extends \Core\Controller
                 }
             }else{
                 header('Location: /login?cod=errlog');
-                die();            }
-
+                die();
+            }
             return true;
         } catch (Exception $ex) {
             header('Location: /login?cod=errlog');
@@ -197,7 +189,6 @@ class User extends \Core\Controller
      */
     public function logoutAction() {
         try{
-
             if (isset($_COOKIE)){
                 setcookie("email","", time()-3600);
                 unset($_COOKIE['email']);
@@ -205,9 +196,7 @@ class User extends \Core\Controller
                 unset($_COOKIE['password']);
             }
             // Destroy all data registered to the session.
-
             $_SESSION = array();
-
             if (ini_get("session.use_cookies")) {
                 $params = session_get_cookie_params();
                 setcookie(session_name(), '', time() - 42000,
@@ -215,17 +204,11 @@ class User extends \Core\Controller
                     $params["secure"], $params["httponly"]
                 );
             }
-
             session_destroy();
-
             header ("Location: /");
-
             return true;
         } catch(\Exception $e){
-
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
-
         }
     }
-
 }
