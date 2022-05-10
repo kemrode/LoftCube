@@ -186,4 +186,19 @@ class Articles extends Model {
 
         }
     }
+
+    public static function searchByWording($object) {
+        $db = static::getDB();
+        $sql = "SELECT name, description FROM articles WHERE name LIKE :name OR description LIKE :description";
+        try {
+            $request = $db->prepare($sql);
+            $request->execute([
+                'name' => $object,
+                'description' => $object
+            ]);
+            return $request->fetchAll();
+        } catch (\Exception $e) {
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+        }
+    }
 }
