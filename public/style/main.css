@@ -1821,11 +1821,10 @@ footer {
     .banner-text .line {
       display: none; }
     .banner-text .b-text {
-      color: #000000;
       font-size: 30px;
       text-align: center;
-      line-height: 30px;
-      padding-top: 30px; }
+      padding-top: 30px;
+      font-weight: bold; }
     .banner-text .overtext {
       margin: 15px 0;
       color: #a1a1a1;
@@ -2566,3 +2565,22 @@ footer {
   flex-direction: column;
   justify-content: center;
   align-items: center; }
+
+@media only screen and (max-width: 767px) {
+  .container-fluid {
+    padding-left: 0px;
+    padding-right: 0px; } }
+
+@media only screen and (max-width: 767px) {
+  .col-xs-3 {
+    width: 10%; } }
+
+@media only screen and (max-width: 767px) {
+  .col-xs-6 {
+    width: 70%; } }
+
+@media only screen and (max-width: 767px) {
+  .navbar-brand {
+    padding: 0px; }
+    .navbar-brand span {
+      margin-left: 5px; } }
