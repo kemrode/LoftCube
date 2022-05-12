@@ -4,3 +4,4 @@ composer.lock
 sql
 logs
 node_modules
+.phpunit.result.cache
