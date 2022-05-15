@@ -34,6 +34,7 @@ class Search extends \Core\Controller
         try {
             $result = Articles::searchByWording($object);
             var_dump($result);
+            View::renderTemplate('Home/index.html');
         } catch (\Exception $e) {
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";
         }
