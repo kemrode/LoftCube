@@ -193,8 +193,8 @@ class Articles extends Model {
         try {
             $request = $db->prepare($sql);
             $request->execute([
-                'name' => $object,
-                'description' => $object
+                'name' => '%'.$object.'%',
+                'description' => '%'.$object.'%'
             ]);
             return $request->fetchAll();
         } catch (\Exception $e) {
