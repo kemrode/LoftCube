@@ -29,9 +29,14 @@ class Search extends \Core\Controller
      * dans le champ recherche.
      * sql LIKE
      */
-    private function searchingObject($object)
+    public function searchingObject()
     {
+        if(isset($_POST['submit'])){
+            var_dump($_POST['submit']);
+    }
         try {
+            $object = $_POST['submit'];
+            var_dump($object);
             $result = Articles::searchByWording($object);
             var_dump($result);
             View::renderTemplate('Home/index.html');
