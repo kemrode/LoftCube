@@ -4,15 +4,15 @@ let article = document.querySelector('#articlelist');
 
 
 //EventListener
-searchInput.addEventListener('keypress', (event) => {
-    if(event.keyCode == 13) {
-        alert(searchInput.value)
-        if(searchInput.value != null) {
-            alert("je suis dans le 2ème IF");
-            getProductsAndRender(searchInput.value);
-        }
-    }
-});
+// searchInput.addEventListener('keypress', (event) => {
+//     if(event.keyCode == 13) {
+//         alert(searchInput.value)
+//         if(searchInput.value != null) {
+//             alert("je suis dans le 2ème IF");
+//             getProductsAndRender(searchInput.value);
+//         }
+//     }
+// });
 
 function getProductsAndRender(option = ''){
     $.ajax({
@@ -23,6 +23,13 @@ function getProductsAndRender(option = ''){
             renderProduct(result[i])
         }
     });
+}
+
+function displaySearchedProduct(result){
+    $(article).empty();
+    for(let i = 0; i < result.length; i++){
+        renderProduct(result[i]);
+    }
 }
 
 function renderProduct($product){
@@ -48,4 +55,5 @@ function renderProduct($product){
 
 $( document ).ready(function() {
     getProductsAndRender();
+    // displaySearchedProduct();
 });

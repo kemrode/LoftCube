@@ -12,13 +12,14 @@ class Search extends \Core\Controller
      * Affichage page search.html qui renvoit le résultat de la recherche
      * --> Liste des choses correspondantes à la recherche
      */
-    public function indexSearch()
+    public function indexSearch($result)
     {
         if(isset($_POST['submit'])){
             try {
-                View::renderTemplate('User/Search.html');
+                View::renderTemplate('Product/search.html', ["result" => $result]);
             } catch (\Exception $e)
             {
+                var_dump("ça merde vraiment");
                 echo "<script>console.log('Debug Objects:" . $e ."');</script>";
             }
         }
@@ -31,16 +32,14 @@ class Search extends \Core\Controller
      */
     public function searchingObject()
     {
-        if(isset($_POST['submit'])){
-            var_dump($_POST['submit']);
-    }
         try {
-            $object = $_POST['submit'];
-            var_dump($object);
-            $result = Articles::searchByWording($object);
-            var_dump($result);
-            View::renderTemplate('Home/index.html');
+            if(isset($_POST['submit'])){
+                $object = $_POST['submit'];
+                $result = Articles::searchByWording($object);
+                return $this->indexSearch($result);
+            }
         } catch (\Exception $e) {
+            var_dump("ça merde");
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";
         }
     }
