@@ -66,7 +66,6 @@ class User extends Model {
      */
     //TODO verrifier l'utilité de la fonction login()
     public static function login() {
-        var_dump("ici" ); die();
 
         $db = static::getDB();
 

@@ -115,6 +115,40 @@ class Articles extends Model {
 
         }
     }
+    public static function getcountByUser($id) {
+        $db = static::getDB();
+
+        $stmt = $db->prepare('
+        SELECT COUNT(*) as nb_art FROM articles WHERE user_id = ?');
+        try{
+            $stmt->execute([$id]);
+            $e = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+
+            return $e;
+        } catch(\Exception $e){
+
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
+    }
+    public static function getcountviewByUser($id) {
+        $db = static::getDB();
+
+        $stmt = $db->prepare('
+        SELECT SUM(views) as nb_vue FROM articles WHERE user_id = ?');
+        try{
+            $stmt->execute([$id]);
+            $e = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+
+            return $e;
+        } catch(\Exception $e){
+
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
+    }
 
     /**
      * ?

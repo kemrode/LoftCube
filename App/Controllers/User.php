@@ -106,13 +106,18 @@ class User extends \Core\Controller
     {
         try{
             $articles = Articles::getByUser($_SESSION['user']['id']);
+            $count = Articles::getcountByUser($_SESSION['user']['id']);
+            $countview = Articles::getcountviewByUser($_SESSION['user']['id']);
+
         } catch(\Exception $e){
 
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
 
         }
         View::renderTemplate('User/account.html', [
-            'articles' => $articles
+            'articles' => $articles,
+            'nb_art' => $count['nb_art'],
+            'nb_vue' => $countview['nb_vue']
         ]);
     }
 
