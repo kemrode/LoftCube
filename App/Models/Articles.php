@@ -100,11 +100,21 @@ class Articles extends Model {
      */
     public static function getByUser($id) {
         $db = static::getDB();
-
-        $stmt = $db->prepare('
+        $query = '
             SELECT *, articles.id as id FROM articles
             LEFT JOIN users ON articles.user_id = users.id
-            WHERE articles.user_id = ?');
+            WHERE articles.user_id = ? ';
+        if (isset($_GET['arg'])){
+            if ($_GET['arg'] == 'pop'){
+                $query .= 'order by views desc';
+            }
+            if ($_GET['arg'] == 'rec'){
+                $query .= 'order by published_date desc';
+
+            }
+        }
+        
+        $stmt = $db->prepare($query);
         try{
             $stmt->execute([$id]);
 

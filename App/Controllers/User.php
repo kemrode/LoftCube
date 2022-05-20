@@ -108,16 +108,25 @@ class User extends \Core\Controller
             $articles = Articles::getByUser($_SESSION['user']['id']);
             $count = Articles::getcountByUser($_SESSION['user']['id']);
             $countview = Articles::getcountviewByUser($_SESSION['user']['id']);
+            if(isset($_GET['arg'])&& ($_GET['arg'] == 'pop' ||($_GET['arg'] == 'rec' ))){
+                $arg =$_GET['arg'];
+
+            }else {
+                $arg = null;
+            }
 
         } catch(\Exception $e){
 
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
 
         }
+
         View::renderTemplate('User/account.html', [
             'articles' => $articles,
             'nb_art' => $count['nb_art'],
-            'nb_vue' => $countview['nb_vue']
+            'nb_vue' => $countview['nb_vue'],
+            'arg' => $arg,
+
         ]);
     }
 
