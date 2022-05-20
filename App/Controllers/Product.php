@@ -35,7 +35,6 @@ class Product extends \Core\Controller
 
                 header('Location: /product/' . $id);
             } catch (\Exception $e){
-                    var_dump($e);
             }
         }
 
@@ -55,7 +54,6 @@ class Product extends \Core\Controller
             $suggestions = Articles::getSuggest();
             $article = Articles::getOne($id);
         } catch(\Exception $e){
-            var_dump($e);
         }
 
         View::renderTemplate('Product/Show.html', [
