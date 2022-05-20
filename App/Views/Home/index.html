@@ -74,7 +74,7 @@
                 '                                <div class="b-article">' +
                 '                                    <div class="v-img">' +
                 '                                        <a href="/product/'+ $product.id + '">' +
-                '                                            <img src="/storage/'+ $product.picture +'" alt=""></a>' +
+                '                                            <img src="/storage/'+ ($product.picture==null?'default.jpg':$product.picture) +'" alt=""></a>' +
                 '                                    </div>' +
                 '                                    <div class="v-desc">' +
                 '                                        <a href="/product/'+ $product.id + '">'+ $product.name+'</a>' +
