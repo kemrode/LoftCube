@@ -2584,3 +2584,9 @@ footer {
     padding: 0px; }
     .navbar-brand span {
       margin-left: 5px; } }
+
+.rowSearch {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center; }
