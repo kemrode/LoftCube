@@ -193,6 +193,7 @@ class Articles extends Model {
      * @throws Exception
      */
     public static function save($data) {
+
         $db = static::getDB();
         $stmt = $db->prepare('INSERT INTO articles(name, description, user_id, published_date) VALUES (:name, :description, :user_id,:published_date)');
         $published_date =  new DateTime();
