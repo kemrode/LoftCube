@@ -43,7 +43,6 @@ class Error
         // Code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
 
-        //todo trouver comment faire en sorte de récupérer le code erreur de $exception
         $trace = $exception->getTrace();
         if ($code != 404) {
             $code = 500;

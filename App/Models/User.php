@@ -64,7 +64,6 @@ class User extends Model {
      * @return string|boolean
      * @throws Exception
      */
-    //TODO verrifier l'utilité de la fonction login()
     public static function login() {
 
         $db = static::getDB();

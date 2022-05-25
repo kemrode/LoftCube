@@ -24,7 +24,6 @@ class Product extends \Core\Controller
             try {
                 $f = $_POST;
 
-                // TODO: Validation
 
                 $f['user_id'] = $_SESSION['user']['id'];
                 $id = Articles::save($f);

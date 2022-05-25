@@ -194,9 +194,7 @@ class Articles extends Model {
      */
     public static function save($data) {
         $db = static::getDB();
-
         $stmt = $db->prepare('INSERT INTO articles(name, description, user_id, published_date) VALUES (:name, :description, :user_id,:published_date)');
-
         $published_date =  new DateTime();
         $published_date = $published_date->format('Y-m-d');
         $stmt->bindParam(':name', $data['name']);
