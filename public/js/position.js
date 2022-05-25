@@ -21,17 +21,7 @@ function showPosition(position) {
        console.log(feature);
        let context = feature.context['1'];
        console.log(context);
-       result = context.map(function (obj) {
-           return {
-               one: obj.id,
-               two: obj.wikidata,
-               three: obj.text,
-           }
-       });
-       console.log(result.three);
-       // let test = JSON.parse(context);
-       // let city = test.text;
-       // console.log(city);
+       console.log(context.text);
     }).catch((error) => {
         console.error(error);
     });

@@ -19,7 +19,6 @@ class Search extends \Core\Controller
                 View::renderTemplate('Product/search.html', ["result" => $result]);
             } catch (\Exception $e)
             {
-                var_dump("ça merde vraiment");
                 echo "<script>console.log('Debug Objects:" . $e ."');</script>";
             }
         }
@@ -39,7 +38,6 @@ class Search extends \Core\Controller
                 return $this->indexSearch($result);
             }
         } catch (\Exception $e) {
-            var_dump("ça merde");
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";
         }
     }
