@@ -1,9 +1,13 @@
 var latitude;
 var longitude;
 
+var getCity = document.querySelector('.noStyle');
+var test = getCity.value;
+
 getLocation();
 
 function getLocation() {
+    console.log(test);
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
@@ -14,14 +18,11 @@ function getLocation() {
 function showPosition(position) {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
-    console.log(latitude);
-    console.log(longitude);
     GetLocalisationOfCity().then((response) => {
        let feature = response.features['0'];
-       console.log(feature);
        let context = feature.context['1'];
-       console.log(context);
-       console.log(context.text);
+       test = context.text;
+       console.log(test);
     }).catch((error) => {
         console.error(error);
     });

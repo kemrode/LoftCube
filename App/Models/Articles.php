@@ -225,9 +225,7 @@ class Articles extends Model {
         try{
             $stmt->execute();
         } catch(\Exception $e){
-
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
-
         }
     }
 
@@ -245,4 +243,17 @@ class Articles extends Model {
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
         }
     }
+
+    public static function searchAroundMe($city){
+        $db = static::getDB();
+        $sql = "SELECT * FROM articles WHERE city =:city";
+        try {
+            $request = $db->prepare($sql);
+            $request->execute(['city'=>$city]);
+//            var_dump($request->fetchAll());
+            return $request->fetchAll();
+        } catch (\Exception $e) {
+            echo $e;
+        }
+}
 }

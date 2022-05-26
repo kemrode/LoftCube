@@ -24,6 +24,15 @@ class Search extends \Core\Controller
         }
     }
 
+    public function aroundMeSearch($result){
+        try {
+            var_dump("ça pue la muerte ici");
+            View::renderTemplate('Product/search.html', ["result" => $result]);
+        } catch (\Exception $e) {
+            echo $e;
+        }
+    }
+
     /**
      * Fonction permettant de procéder à la recherche de ce qui est saisi
      * dans le champ recherche.
@@ -37,6 +46,17 @@ class Search extends \Core\Controller
                 $result = Articles::searchByWording($object);
                 return $this->indexSearch($result);
             }
+        } catch (\Exception $e) {
+            echo "<script>console.log('Debug Objects:" . $e ."');</script>";
+        }
+    }
+
+    public function searchAround() {
+        try {
+            $city = $_POST['getCity'];
+            $result = Articles::searchAroundMe($city);
+            var_dump("mon résultat est : "+$result);
+            return $this->aroundMeSearch($result);
         } catch (\Exception $e) {
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";
         }
