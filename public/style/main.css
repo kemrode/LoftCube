@@ -27,7 +27,7 @@ body {
   font-family: "Hind Guntur", sans-serif;
   font-size: 16px;
   background-color: #ffffff;
-  width: 100%;
+  width: auto;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -1643,7 +1643,7 @@ ul.menu {
 footer {
   border-top: solid 1px #eceff0;
   bottom: 0;
-  width: 100%; }
+  width: auto; }
   footer .row .padding-def {
     display: flex;
     align-items: center; }
@@ -2584,3 +2584,14 @@ footer {
     padding: 0px; }
     .navbar-brand span {
       margin-left: 5px; } }
+
+.rowSearch {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center; }
+
+@media only screen and (max-width: 767px) {
+  body {
+    margin: 0;
+    padding: 0; } }

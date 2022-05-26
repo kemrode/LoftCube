@@ -19,9 +19,17 @@ class Search extends \Core\Controller
                 View::renderTemplate('Product/search.html', ["result" => $result]);
             } catch (\Exception $e)
             {
-                var_dump("ça merde vraiment");
                 echo "<script>console.log('Debug Objects:" . $e ."');</script>";
             }
+        }
+    }
+
+    public function aroundMeSearch($result){
+        try {
+            var_dump("ça pue la muerte ici");
+            View::renderTemplate('Product/search.html', ["result" => $result]);
+        } catch (\Exception $e) {
+            echo $e;
         }
     }
 
@@ -39,7 +47,17 @@ class Search extends \Core\Controller
                 return $this->indexSearch($result);
             }
         } catch (\Exception $e) {
-            var_dump("ça merde");
+            echo "<script>console.log('Debug Objects:" . $e ."');</script>";
+        }
+    }
+
+    public function searchAround() {
+        try {
+            $city = $_POST['getCity'];
+            $result = Articles::searchAroundMe($city);
+            var_dump("mon résultat est : "+$result);
+            return $this->aroundMeSearch($result);
+        } catch (\Exception $e) {
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";
         }
     }

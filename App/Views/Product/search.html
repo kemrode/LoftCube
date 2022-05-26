@@ -19,7 +19,13 @@
                                             <span class="hidden-xs">À la une</span>
                                         </a>
                                     </li>
-                                    <li><a href="#">Autour de moi</a></li>
+<!--                                    <li>-->
+<!--                                        <form action="/Search/searchAround"  class="getCityForm" value="rouen" method="post">-->
+<!--                                            <button type="submit" name="getCity" class="noStyle" value="rouen"/>-->
+<!--                                            <p>Autour de moi</p>-->
+<!--                                        </form>-->
+<!--                                    </li>-->
+<!--                                    <li><a href="#">Autour de moi</a></li>-->
                                 </ul>
                             </div>
                             <div class="col-lg-2 col-sm-2 col-xs-4">
@@ -43,7 +49,7 @@
                     </div>
 
                     <div class="cb-content">
-                        <div class="row" id="articlelist">
+                        <div class="row rowSearch" id="articlelist">
                             {% for item in result %}
                             <div class="col-lg-4 col-sm-6 articleitem" id="article-pattern">
                                 <div class="b-article">
