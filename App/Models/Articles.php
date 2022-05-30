@@ -257,14 +257,56 @@ class Articles extends Model {
 
     public static function searchAroundMe($city){
         $db = static::getDB();
-        $sql = "SELECT * FROM articles WHERE city =:city";
+        $cityLongitude = self::getCityLongitude($city);
+        $cityLatitude = self::getCityLatitude($city);
+        $test = $cityLongitude[0];
+        $longitude = $test[0];
+        $testLat = $cityLatitude[0];
+        $latitude = $testLat[0];
+        $sql = "SELECT ville_nom_reel FROM villes_france WHERE (6371 * acos(cos(radians('$latitude')) * cos(radians(ville_latitude_deg)) * cos(radians(ville_longitude_deg) - radians('$longitude')) +sin(radians('$latitude')) * sin(radians(ville_latitude_deg)))) < 15";
         try {
             $request = $db->prepare($sql);
-            $request->execute(['city'=>$city]);
-//            var_dump($request->fetchAll());
+            $request->execute();
             return $request->fetchAll();
         } catch (\Exception $e) {
             echo $e;
         }
-}
+
+//        $sql = "SELECT *,
+//       (acos(cos(radians('.$lat')) * cos(radians(lat)) * cos(radians(long) - radians('.$long')) + sin(radians('.$lat')) * sin(radians(lat))))
+//           AS distance FROM articles WHERE distance < 15 ORDER BY distance LIMIT 0, 10";
+////        $sql = "SELECT * FROM articles WHERE city =:city";
+//        try {
+//            $request = $db->prepare($sql);
+//            $request->execute(['city'=>$city]);
+//            return $request->fetchAll();
+//        } catch (\Exception $e) {
+//            echo $e;
+//        }
+    }
+
+    public static function getCityLongitude($city){
+        $db = static::getDB();
+//        $upperCity = strtoupper($city);
+        $sql = 'SELECT ville_longitude_deg FROM villes_france WHERE ville_nom_reel =:city';
+        try {
+            $request = $db->prepare($sql);
+            $request->execute((['city'=>$city]));
+            return $request->fetchAll();
+        } catch (\Exception $e){
+            echo $e;
+        }
+    }
+    public static function getCityLatitude($city){
+        $db = static::getDB();
+//        $upperCity = strtoupper($city);
+        $sql = 'SELECT ville_latitude_deg FROM villes_france WHERE ville_nom_reel =:city';
+        try {
+            $request = $db->prepare($sql);
+            $request->execute((['city'=>$city]));
+            return $request->fetchAll();
+        } catch (\Exception $e){
+            echo $e;
+        }
+    }
 }

@@ -26,7 +26,6 @@ class Search extends \Core\Controller
 
     public function aroundMeSearch($result){
         try {
-            var_dump("ça pue la muerte ici");
             View::renderTemplate('Product/search.html', ["result" => $result]);
         } catch (\Exception $e) {
             echo $e;
