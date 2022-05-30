@@ -7,6 +7,7 @@ use App\Core;
 use DateTime;
 use Exception;
 use App\Utility;
+use function Sodium\add;
 
 /**
  * Articles Model
@@ -255,7 +256,7 @@ class Articles extends Model {
         }
     }
 
-    public static function searchAroundMe($city){
+    public static function getAllCitiesAroundMe($city){
         $db = static::getDB();
         $cityLongitude = self::getCityLongitude($city);
         $cityLatitude = self::getCityLatitude($city);
@@ -271,23 +272,29 @@ class Articles extends Model {
         } catch (\Exception $e) {
             echo $e;
         }
+    }
 
-//        $sql = "SELECT *,
-//       (acos(cos(radians('.$lat')) * cos(radians(lat)) * cos(radians(long) - radians('.$long')) + sin(radians('.$lat')) * sin(radians(lat))))
-//           AS distance FROM articles WHERE distance < 15 ORDER BY distance LIMIT 0, 10";
-////        $sql = "SELECT * FROM articles WHERE city =:city";
-//        try {
-//            $request = $db->prepare($sql);
-//            $request->execute(['city'=>$city]);
-//            return $request->fetchAll();
-//        } catch (\Exception $e) {
-//            echo $e;
-//        }
+    public static function searchAroundMe($cities){
+        //TODO : voir pour créer un model Article/Item pour binder les infos récupérer et faciliter ensuite leur utilisation
+        $db = static::getDB();
+        $arrayArticles = [];
+        foreach ($cities as $city){
+            var_dump($city);
+//            $sql = "SELECT * FROM articles WHERE city =:city";
+//            try {
+//                $request = $db->prepare($sql);
+//                $request->execute(['city'=>$city]);
+//                $result = $request->fetchAll();
+//                $arrayArticles.add($result);
+//            } catch (\Exception $e) {
+//                echo $e;
+//            }
+        }
+//        var_dump($arrayArticles);
     }
 
     public static function getCityLongitude($city){
         $db = static::getDB();
-//        $upperCity = strtoupper($city);
         $sql = 'SELECT ville_longitude_deg FROM villes_france WHERE ville_nom_reel =:city';
         try {
             $request = $db->prepare($sql);
@@ -299,7 +306,6 @@ class Articles extends Model {
     }
     public static function getCityLatitude($city){
         $db = static::getDB();
-//        $upperCity = strtoupper($city);
         $sql = 'SELECT ville_latitude_deg FROM villes_france WHERE ville_nom_reel =:city';
         try {
             $request = $db->prepare($sql);

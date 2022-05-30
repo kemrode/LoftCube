@@ -53,8 +53,8 @@ class Search extends \Core\Controller
     public function searchAround() {
         try {
             $city = $_POST['getCity'];
-            $result = Articles::searchAroundMe($city);
-            var_dump("mon résultat est : "+$result);
+            $citiesAroundMe = Articles::getAllCitiesAroundMe($city);
+            $result = Articles::searchAroundMe($citiesAroundMe);
             return $this->aroundMeSearch($result);
         } catch (\Exception $e) {
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";
