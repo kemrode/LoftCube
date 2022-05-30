@@ -19,7 +19,6 @@ class SendMail{
 
             $mail->Helo = 'paulin-buland.fr'; //Nécessaire pour envoyer des mails
             $mail->CharSet = 'UTF-8';
-            $mail->SMTPDebug = 2;
             $mail->isSMTP();
             $mail->Host = 'smtp.online.net';
             $mail->SMTPAuth = true;
