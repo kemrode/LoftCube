@@ -1,18 +1,21 @@
 <?php
 
+namespace Core;
+
+use phpDocumentor\Reflection\Types\Boolean;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 class SendMail{
-    function sendOneMail($destinataire, $objet, $message){
+    public static function sendOneMail($destinataire, $objet, $message) : string{
         try{
             if ($destinataire == '') {
-                return 'Destinataire non défini';
+                return 'Erreur : Destinataire non défini';
             } elseif ($objet == ''){
-                return 'Objet du mail non défini';
+                return 'Erreur : Objet du mail non défini';
             }else if ($message == ''){
-                return 'Message non défini';
+                return 'Erreur : Message non défini';
             }
 
             $mail = new PHPMailer(TRUE);
@@ -40,10 +43,10 @@ class SendMail{
             if($mail->send()){
                 return 'Le mail a bien été envoyé';
             }else {
-                return 'Une erreur est survenue pendant l\'envoi du mail : ' . $mail->ErrorInfo;
+                return 'Erreur : Une erreur est survenue pendant l\'envoi du mail : ' . $mail->ErrorInfo;
             }
         } catch(\Exception $e){
-            return "Une erreur est survenue : $e";
+            return "Erreur : $e";
 
         }
     }
