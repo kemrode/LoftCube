@@ -69,8 +69,6 @@ class Product extends \Core\Controller
                 $resultSendMail = "";
             }
 
-            var_dump($article);
-
         } catch(\Exception $e){
             var_dump($e);
         }
