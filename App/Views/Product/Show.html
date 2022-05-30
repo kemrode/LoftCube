@@ -45,16 +45,25 @@
                     <br>
                     <br>
                     <div class="u-area mt-small">
+
+                        {% if (resultSendMail is empty) or (resultSendMail starts with 'Erreur' ) %}
+                        <h3 style="color:Red;">
+                            {{resultSendMail}}
+                        </h3>
                         <form name="envoie_email" action="" method="post">
-                            <label for="email"> Écrivez un Email à {{article.username}} </label>
-                            <textarea id="email" name="email"></textarea>
-                            <input type="hidden" value="{{article.email}}">
+                            <label for="messageMailContact"> Écrivez un Email à {{article.username}} </label>
+                            <textarea id="messageMailContact" name="messageMailContact"></textarea>
+                            <input type="hidden" name="adresseMailContact" value="{{article.email}}">
                             <button name="submit"  class="btn btn-primary u-btn">Contacter {{article
                                 .username}}</button>
                         </form>
+                        {% else %}
+                        <h3 style="color:dodgerblue;">
+                            {{resultSendMail}}
+                        </h3>
+                        {% endif %}
                         <br>
                         <br>
-
                     </div>
                 </div>
             </div>

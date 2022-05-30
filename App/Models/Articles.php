@@ -193,24 +193,36 @@ class Articles extends Model {
      * @throws Exception
      */
     public static function save($data) {
+        $regex_for_text =
+            '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
+            'script[^>]*>';
+        $data['name'] = preg_replace("#$regex_for_text#i",'',$data['name']);
+        $data['description'] = preg_replace("#$regex_for_text#i",'',$data['description']);
+        $data['city'] = preg_replace("#$regex_for_text#i",'',$data['city']);
 
-        $db = static::getDB();
-        $stmt = $db->prepare('INSERT INTO articles(name, description, user_id, published_date) VALUES (:name, :description, :user_id,:published_date)');
-        $published_date =  new DateTime();
-        $published_date = $published_date->format('Y-m-d');
-        $stmt->bindParam(':name', $data['name']);
-        $stmt->bindParam(':description', $data['description']);
-        $stmt->bindParam(':published_date', $published_date);
-        $stmt->bindParam(':user_id', $data['user_id']);
-        try{
-            $stmt->execute();
+      if ( isset($data['name']) && isset($data['description']) && isset($data['user_id']) && isset($data['city'])
+          && $data['name']!="" && $data['description']!="" && $data['city']!="" && $data['user_id']!="") {
+          $db = static::getDB();
+          $stmt = $db->prepare('INSERT INTO articles(name, description, user_id,city, published_date) VALUES (:name, :description, :user_id,:city,:published_date)');
+          $published_date = new DateTime();
+          $published_date = $published_date->format('Y-m-d');
+          $stmt->bindParam(':name', $data['name']);
+          $stmt->bindParam(':description', $data['description']);
+          $stmt->bindParam(':published_date', $published_date);
+          $stmt->bindParam(':user_id', $data['user_id']);
+          $stmt->bindParam(':city', $data['city']);
+          try {
+              $stmt->execute();
 
-            return $db->lastInsertId();
-        } catch(\Exception $e){
+              return $db->lastInsertId();
+          } catch (\Exception $e) {
 
-            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+              echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
 
-        }
+          }
+      }else{
+
+      }
     }
 
     public static function attachPicture($articleId, $pictureName){
