@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Articles;
 use App\Utility\Upload;
 use \Core\View;
+use \Core\SendMail;
 
 /**
  * Product controller
@@ -82,6 +83,22 @@ class Product extends \Core\Controller
             Articles::addOneView($id);
             $suggestions = Articles::getSuggest();
             $article = Articles::getOne($id);
+
+            if (isset($_POST['messageMailContact']) && $_POST['messageMailContact'] <> ''){
+                //Ajout de la sécurité JS
+                $regex_for_text =
+                    '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
+                    'script[^>]*>';
+                $messagePourMail = preg_replace("#$regex_for_text#i",'',$_POST['messageMailContact']);
+
+                $resultSendMail = SendMail::sendOneMail($article[0]["email"], 'Nouveau message concernant votre annonce "' . $article[0]["name"] .'" !', $messagePourMail);
+
+            } else {
+                $resultSendMail = "";
+            }
+
+            var_dump($article);
+
         } catch(\Exception $e){
             var_dump($e);
         }

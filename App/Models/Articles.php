@@ -55,7 +55,7 @@ class Articles extends Model {
         $db = static::getDB();
 
         $stmt = $db->prepare('
-            SELECT * FROM articles
+            SELECT articles.id,articles.name,articles.description,articles.published_date,articles.views,articles.picture,users.username,users.email FROM articles
             INNER JOIN users ON articles.user_id = users.id
             WHERE articles.id = ? 
             LIMIT 1');

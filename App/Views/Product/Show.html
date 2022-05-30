@@ -53,7 +53,6 @@
                         <form name="envoie_email" action="" method="post">
                             <label for="messageMailContact"> Écrivez un Email à {{article.username}} </label>
                             <textarea id="messageMailContact" name="messageMailContact"></textarea>
-                            <input type="hidden" name="adresseMailContact" value="{{article.email}}">
                             <button name="submit"  class="btn btn-primary u-btn">Contacter {{article
                                 .username}}</button>
                         </form>
@@ -64,6 +63,7 @@
                         {% endif %}
                         <br>
                         <br>
+
                     </div>
                 </div>
             </div>
