@@ -4,9 +4,8 @@
 
 footer {
   border-top: solid 1px $c-divider;
-  position: absolute;
   bottom: 0;
-  width: 100%;
+  width: auto;
 
   .row {
     .padding-def {

@@ -87,10 +87,4 @@ class RouterTest extends TestCase
 //            ->with($this->equalTo($testResult));
 //        $this->assertSame($testResult, $client);
     }
-
-
-
-
-
-
 }

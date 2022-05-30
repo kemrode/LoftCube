@@ -5,8 +5,14 @@ namespace Tests\Core;
 use Core\Controller;
 use PHPUnit\Framework\TestCase;
 
+function method_exists(){
+    return ControllerTest::$function->method_exists();
+}
+
 class ControllerTest extends TestCase
 {
+    public static $function;
+
 
     protected static function getProtectedVar($name) {
         $router = new \ReflectionClass('Core\Controller');
@@ -22,7 +28,7 @@ class ControllerTest extends TestCase
         return $removeQueryStringVariables;
     }
 
-    public function testCallMethodExist() {
+    public function testCallNotEmpty() {
         $routeParamsTest = self::getProtectedVar('route_params');
         $actionName = 'Action';
         $args = [];
@@ -32,5 +38,7 @@ class ControllerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->assertNotEmpty($controllerTest);
+        self::$function->shouldReceive('method_exists')->once()->andReturn(false);
+        $this->assertEquals($controllerTest->__call(), false);
     }
 }

@@ -22,8 +22,12 @@ class Error
      */
     public static function errorHandler($level, $message, $file, $line)
     {
+
         if (error_reporting() !== 0) {  // to keep the @ operator working
             throw new \ErrorException($message, 0, $level, $file, $line);
+
+
+
         }
     }
 
@@ -39,7 +43,6 @@ class Error
         // Code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
 
-        //todo trouver comment faire en sorte de récupérer le code erreur de $exception
         $trace = $exception->getTrace();
         if ($code != 404) {
             $code = 500;
@@ -48,7 +51,7 @@ class Error
 
         if (\App\Config::SHOW_ERRORS) {
             View::renderTemplate("$code.html");
- } else {
+        } else {
             $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.txt';
             ini_set('error_log', $log);
 

@@ -1,9 +1,12 @@
 /*
 * Content Index
 */
-
+@import "mixin";
 .content-wrapper {
   background-color: $c-bg;
+  @media only screen and(max-width: 767px) {
+    margin-top: 90px;
+  }
 }
 
 .content-block {
@@ -102,12 +105,13 @@
 }
 
 .b-article {
+  @include display-flex-column-center();
   .v-img {
     height: 200px;
     border-radius: 2px;
     position: relative;
     img {
-      object-fit: cover;
+      object-fit: contain;
       height: 100%;
       width: 100%;
     }
@@ -192,6 +196,13 @@
     color: $c-caption;
     font-weight: 500;
     padding-top: $space-sms;
+  }
+
+  .v-desc-global {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .v-views {
@@ -570,7 +581,8 @@
 }
 
 .cb-content {
-    width: 130% !important; // FIX INTERNET EXPLORER ;
+
+    //width: 130% !important; // FIX INTERNET EXPLORER ;
 }
 
 /*

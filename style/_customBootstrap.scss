@@ -1,0 +1,46 @@
+@import "mixin";
+
+.addForm {
+  @include display-flex-column-center();
+}
+
+.container-fluid {
+  @media only screen and(max-width: 767px) {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
+.col-xs-3 {
+  @media only screen and(max-width: 767px){
+    width: 10%;
+  }
+}
+.col-xs-6 {
+  @media only screen and(max-width: 767px){
+    width: 70%;
+  }
+}
+
+.navbar-brand {
+    @media only screen and(max-width: 767px){
+      padding: 0px;
+      & span {
+        margin-left: 5px;
+      }
+    }
+}
+
+.rowSearch {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+}
+
+body {
+  @media only screen and(max-width: 767px) {
+    margin: 0;
+    padding: 0;
+  }
+}

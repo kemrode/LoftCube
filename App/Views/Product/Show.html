@@ -9,8 +9,14 @@
         <div class="row">
             <div class="col-lg-8 col-xs-12 col-sm-12">
                 <div class="preview-article">
-                    <img
-                            src="{{ ('/storage/' ~ article.picture) }}"/>
+                    {% if article.picture is  null %}
+                    <img src="/storage/default.jpg"/>
+
+                    {% else %}
+
+                    <img src="{{ ('/storage/' ~ article.picture) }}"/>
+
+                    {% endif %}
 
                 </div>
                 <h1><a href="#">{{article.name}}</a></h1>
@@ -36,10 +42,27 @@
                         <h4>Description:</h4>
                         <p>{{article.description}}</p>
                     </div>
+                    <br>
+                    <br>
                     <div class="u-area mt-small">
 
-                    <a name="submit" href="mailto:{{article.email}}" class="btn btn-primary u-btn">Contacter {{article
-                        .username}}</a>
+                        {% if (resultSendMail is empty) or (resultSendMail starts with 'Erreur' ) %}
+                        <h3 style="color:Red;">
+                            {{resultSendMail}}
+                        </h3>
+                        <form name="envoie_email" action="" method="post">
+                            <label for="messageMailContact"> Écrivez un Email à {{article.username}} </label>
+                            <textarea id="messageMailContact" name="messageMailContact"></textarea>
+                            <button name="submit"  class="btn btn-primary u-btn">Contacter {{article
+                                .username}}</button>
+                        </form>
+                        {% else %}
+                        <h3 style="color:dodgerblue;">
+                            {{resultSendMail}}
+                        </h3>
+                        {% endif %}
+                        <br>
+                        <br>
 
                     </div>
                 </div>
@@ -65,7 +88,6 @@
                         {% endfor %}
                     </div>
                 </div>
-                <!-- END up next -->
             </div>
         </div>
     </div>
