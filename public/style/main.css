@@ -1210,6 +1210,7 @@ ul.menu {
     border: none;
     background-color: #eceff0; }
   .topsearch .input-group-addon {
+    width: auto;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 20px; }
     .topsearch .input-group-addon i {
@@ -1260,15 +1261,6 @@ ul.menu {
 @media only screen and (max-width: 767px) {
   .navbar-container > .container {
     width: 100%; } }
-
-@media only screen and (max-width: 767px) {
-  .navbar-container:not(.search-open) .input-group-addon {
-    background-color: transparent; } }
-
-@media only screen and (max-width: 767px) {
-  .navbar-container:not(.search-open) input,
-  .navbar-container:not(.search-open) .input-group-btn {
-    display: none !important; } }
 
 @media only screen and (max-width: 767px) {
   .navbar-container.search-open .topsearch {
@@ -1351,6 +1343,7 @@ ul.menu {
       font-weight: bold; } }
 
 .navbar-container {
+  width: 100%;
   height: 70px;
   border-bottom: solid 1px #eceff0; }
   .navbar-container.single {
@@ -1442,8 +1435,7 @@ ul.menu {
 
 @media (min-width: 768px) and (max-width: 1365px) {
   .navbar-container {
-    height: auto;
-    padding-bottom: 15px; }
+    height: auto; }
     .navbar-container .input-group input.form-control {
       width: 100%; }
     .navbar-container .container .upload-button {
@@ -1455,10 +1447,7 @@ ul.menu {
 
 @media (min-width: 100px) and (max-width: 767px) {
   .navbar-container {
-    height: auto;
-    padding-bottom: 15px; }
-    .navbar-container .input-group input.form-control {
-      width: 100%; }
+    height: auto; }
     .navbar-container .container .upload-button {
       top: 165px;
       right: 15px; }
@@ -1644,7 +1633,7 @@ ul.menu {
 footer {
   border-top: solid 1px #eceff0;
   bottom: 0;
-  width: auto; }
+  width: 100%; }
   footer .row .padding-def {
     display: flex;
     align-items: center; }
