@@ -24,28 +24,49 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="e1">Titre</label>
-                                    <input type="text" name="name" class="form-control" id="e1"
-                                           placeholder="Jeu de cartes (rare)">
+
+                                    {% if titre is  null %}
+
+                                    <input type="text" name="name" class="form-control" id="e1" placeholder="Jeu de cartes (rare)">
+                                    {% else %}
+                                    <input type="text" name="name" class="form-control" id="e1" value="{{titre}}" placeholder="Jeu de cartes (rare)">
+                                    {% endif %}
+
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="e2">Description</label>
+
+                                    {% if description is  null %}
+
                                     <textarea class="form-control" name="description" id="e2" rows="3"></textarea>
+                                    {% else %}
+
+                                    <textarea class="form-control" name="description"  id="e2" rows="3">{{description}}</textarea>
+                                    {% endif %}
+
                                 </div>
                             </div>
 
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="e2">Ville</label>
-                                    <input class="form-control cityAutoComplete" type="text" autocomplete="off"/>
+                                    {% if ville is  null %}
+
+                                    <input class="form-control cityAutoComplete"  name="city" type="text" autocomplete="on"/>
+                                    {% else %}
+
+                                    <input class="form-control cityAutoComplete" value="{{ville}}" name="city" type="text" autocomplete="on"/>
+                                    {% endif %}
+
                                 </div>
                             </div>
 
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="e3">Image</label>
-                                    <input type="file" class="form-control" name="picture" id="e3" rows="3"/>
+                                    <input type="file" accept=".jpg, .jpeg, .png" class="form-control" name="picture" id="e3" rows="3"/>
                                 </div>
                             </div>
                         </div>
