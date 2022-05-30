@@ -22,15 +22,17 @@
     <!-- font-family: 'Hind', sans-serif; -->
     <link href='https://fonts.googleapis.com/css?family=Hind:400,300,500,600,700|Hind+Guntur:300,400,500,700' rel='stylesheet' type='text/css'>
 
+    <link href="/style/_customBootstrap.scss" rel="stylesheet">
+
 </head>
 <body>
 <!-- logo, menu, search, avatar -->
-<div class="container-fluid ">
-    <div class="row">
-        <div class="navbar-container">
+<div class="container-fluid  ">
+    <div class="row " >
+        <div class="navbar-container "  >
             <div class="container">
-                <div class="row">
-                    <div class="col-xs-3 visible-xs">
+                <div class="row mobileNavBar" >
+                    <div class="col-xs-3  visible-xs " >
                         <a href="#" class="btn-menu-toggle"><i class="cv cvicon-cv-menu"></i></a>
                     </div>
                     <div class="col-lg-1 col-sm-2 col-xs-6">
@@ -45,22 +47,22 @@
                         </ul>
                     </div>
 
-                    <div class="col-lg-6 col-sm-8 col-xs-3">
-                        <!--<form action="search.html" method="post">
+                    <div class="col-lg-6 col-sm-8 col-xs-3 ">
+                        <form action="/Search/searchingObject" method="post">
                             <div class="topsearch">
                                 <i class="cv cvicon-cv-cancel topsearch-close"></i>
                                 <div class="input-group">
                                     <span class="input-group-addon" id="sizing-addon2"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control" placeholder="Rechercher..."
+                                    <input type="text" name="submit" class="form-control" placeholder="Rechercher..."
                                            aria-describedby="sizing-addon2">
                                 </div>
                             </div>
-                        </form>-->
+                        </form>
                     </div>
 
                     {% if user is not null %}
 
-                    <div class="col-lg-2 col-sm-4 hidden-xs">
+                    <div class="col-lg-2 col-sm-4 hidden-xs ">
                         <div class="selectuser pull-left">
                             <div class="btn-group pull-right dropdown">
                                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -95,8 +97,8 @@
 <div class="mobile-menu">
     <div class="mobile-menu-head">
         <a href="#" class="mobile-menu-close"></a>
-        <a class="navbar-brand" href="index.html">
-            <img src="images/logo.png" alt="Vide Grenier en ligne name" class="logo" />
+        <a class="navbar-brand" href="/">
+            <img src="/images/logo.png" alt="Vide Grenier en ligne name" class="logo" />
             <span>Vide Grenier en ligne</span>
         </a>
     </div>
@@ -105,7 +107,7 @@
             <span>Déposer une annonce</span>
         </a>
 
-        <div class="mobile-menu-list">
+        <div class="mobile-menu-list ">
             <ul>
                 <li>
                     <a href="/">
@@ -119,22 +121,33 @@
                         <p>Mon compte</p>
                     </a>
                 </li>
+                {% if user is null %}
+                <li>
+                    <a href="/register">
+                        <i class="cv cvicon-cv-add-to-playlist"></i>
+                        <p>S'inscrire</p>
+                    </a>
+                </li>
+                {%endif %}
+
 
             </ul>
         </div>
-        <a href="#" class="btn mobile-menu-logout">Déconnexion</a>
+        {% if user is not null %}
+        <a href="/logout" class="btn mobile-menu-logout">Déconnexion</a>
+        {%endif %}
+
     </div>
 </div>
 
-    {% block body %}
-    {% endblock %}
-    <footer>
+    {% block body %}{% endblock %}
+    {% block search %}{% endblock %}
+<footer class="text-center text-lg-start text-muted ">
         <div class="container-fluid">
             <div class="row">
                 <div class="container padding-def">
                     <div class="col-lg-1  col-sm-2 col-xs-12 footer-logo">
-                        <!--<a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="Project name" class="logo" /></a>-->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand" href="/">
                             <img src="/images/logo.png" alt="Vide Grenier en ligne" class="logo" />
                             <span>Vide Grenier en ligne</span>
                         </a>
@@ -144,6 +157,7 @@
                             <ul class="list-inline">
                                 <li><a href="#">Politique relative aux cookies</a></li>
                                 <li><a href="#">Politique de confidentialité</a></li>
+                                <br>
                                 <li>Copyright 2020 <a href="https://www.cesi.fr" class="hidden-xs">CESI</a></li>
                             </ul>
                         </div>
@@ -151,9 +165,9 @@
                     <div class="col-lg-offset-1 col-lg-3 col-sm-4 col-xs-12">
                         <div class="f-last-line">
                             <div class="f-icon pull-left">
-                                <a href="#"><i class="fa fa-facebook-square"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                <a href="https://www.facebook.com/groups/944911375623326"><i class="fa fa-facebook-square"></i></a>
+                                <a href="https://twitter.com/search?q=vide%20grenier%20en%20ligne&src=recent_search_click"><i class="fa fa-twitter"></i></a>
+                                <a href="https://fr.wikipedia.org/wiki/Google%2B"><i class="fa fa-google-plus"></i></a>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -163,12 +177,12 @@
             </div>
         </div>
     </footer>
-    <!-- /footer -->
     <script src="/js/jquery.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
     <script src="/js/custom.js"></script>
-
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <script src="/js/position.js"></script>
     {% block javascript %}
     {% endblock %}
 </body>

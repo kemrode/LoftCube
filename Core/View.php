@@ -20,6 +20,9 @@ class View
      */
     public static function render($view, $args = [])
     {
+
+
+
         extract($args, EXTR_SKIP);
 
         $file = dirname(__DIR__) . "/App/Views/$view";  // relative to Core directory
@@ -41,12 +44,18 @@ class View
      */
     public static function renderTemplate($template, $args = [])
     {
+        if(isset($_GET["cod"])){
+            if($_GET["cod"] == "errem") {echo('<script> alert("L\'email est invalide")</script>')  ;}
+            if($_GET["cod"] == "errlog") {echo('<script> alert("les identifiants ne sont pas corrects")</script>')  ;}
+        }
         static $twig = null;
 
         if ($twig === null) {
             $loader = new \Twig\Loader\FilesystemLoader(dirname(__DIR__) . '/App/Views');
             $twig = new \Twig\Environment($loader, ['debug' => true,]);
             $twig->addExtension(new \Twig\Extension\DebugExtension());
+
+
         }
 
         echo $twig->render($template, View::setDefaultVariables($args));
@@ -64,5 +73,8 @@ class View
         $args["user"] = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         return $args;
+
     }
 }
+
+

@@ -5,7 +5,7 @@ namespace Core;
 /**
  * Router
  *
- * PHP version 7.0
+ * PHP version 8.1
  */
 class Router
 {
@@ -75,7 +75,6 @@ class Router
                         $params[$key] = $match;
                     }
                 }
-
                 $this->params = $params;
                 return true;
             }
