@@ -275,22 +275,20 @@ class Articles extends Model {
     }
 
     public static function searchAroundMe($cities){
-        //TODO : voir pour créer un model Article/Item pour binder les infos récupérer et faciliter ensuite leur utilisation
         $db = static::getDB();
         $arrayArticles = [];
         foreach ($cities as $city){
-            var_dump($city);
-//            $sql = "SELECT * FROM articles WHERE city =:city";
-//            try {
-//                $request = $db->prepare($sql);
-//                $request->execute(['city'=>$city]);
-//                $result = $request->fetchAll();
-//                $arrayArticles.add($result);
-//            } catch (\Exception $e) {
-//                echo $e;
-//            }
+            $cityName = $city[0];
+            $sql = "SELECT * FROM articles WHERE articles.city =:city";
+            $request = $db->prepare($sql);
+            $request->execute(['city'=>$cityName]);
+            $result = $request->fetchAll();
+            if(count($result) != 0){
+                $itemResult = $result[0];
+                $arrayArticles[] = $itemResult;
+            }
         }
-//        var_dump($arrayArticles);
+        return $arrayArticles;
     }
 
     public static function getCityLongitude($city){
