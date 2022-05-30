@@ -4,7 +4,9 @@
         "twig/twig": "~3.0",
       "ext-pdo": "*",
       "ext-json": "*",
-        "phpunit/phpunit-selenium": "*"
+        "phpunit/phpunit-selenium": "*",
+        "zircote/swagger-php": "^4.4",
+        "doctrine/annotations": "^1.13"
     },
   "require-dev": {
     "phpunit/php-code-coverage": "^9.2",
