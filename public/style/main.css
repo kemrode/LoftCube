@@ -853,6 +853,10 @@ video {
     flex-direction: column;
     justify-content: center;
     flex-wrap: wrap; }
+    @media only screen and (min-width: 768px) {
+      .b-article .v-desc-global {
+        width: 50%;
+        align-items: center; } }
   .b-article .v-views {
     font-size: 15px;
     color: #7e7e7e;
@@ -1242,7 +1246,6 @@ ul.menu {
 
 @media only screen and (max-width: 767px) {
   .navbar-container {
-    width: 100%;
     height: auto;
     top: 0;
     left: 0;
@@ -2580,6 +2583,10 @@ footer {
   .col-xs-6 {
     width: 70%; } }
 
+@media only screen and (min-width: 768px) {
+  .col-sm-6 {
+    width: 100%; } }
+
 @media only screen and (max-width: 767px) {
   .navbar-brand {
     padding: 0px; }
@@ -2588,7 +2595,7 @@ footer {
 
 .rowSearch {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-content: center;
   justify-content: center; }
 
