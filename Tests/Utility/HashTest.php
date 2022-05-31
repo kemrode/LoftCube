@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Core;
+namespace Tests\Utility;
 
 use App\Utility\Hash;
 use PHPUnit\Framework\TestCase;
