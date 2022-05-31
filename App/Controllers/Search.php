@@ -55,7 +55,7 @@ class Search extends \Core\Controller
             $city = $_POST['getCity'];
             $citiesAroundMe = Articles::getAllCitiesAroundMe($city);
             $result = Articles::searchAroundMe($citiesAroundMe);
-            if(count($result) == 0){
+            if(count($result) == 0 || empty($city)){
                 View::renderTemplate("404.html");
             } else {
                 return $this->aroundMeSearch($result);
