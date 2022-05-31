@@ -257,6 +257,7 @@ class Articles extends Model {
     }
 
     public static function getAllCitiesAroundMe($city){
+        var_dump($city);
         $db = static::getDB();
         $cityLongitude = self::getCityLongitude($city);
         $cityLatitude = self::getCityLatitude($city);
