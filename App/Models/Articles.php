@@ -279,15 +279,17 @@ class Articles extends Model {
         $arrayArticles = [];
         foreach ($cities as $city){
             $cityName = $city[0];
-            $sql = "SELECT * FROM articles WHERE articles.city =:city";
+            $sql = "SELECT *,CONCAT(LEFT(description,20),'...') as description FROM articles WHERE articles.city =:city";
             $request = $db->prepare($sql);
             $request->execute(['city'=>$cityName]);
             $result = $request->fetchAll();
-            if(count($result) != 0){
-                $itemResult = $result[0];
-                $arrayArticles[] = $itemResult;
+            if(count($result) > 0){
+                foreach ($result as $item) {
+                    $arrayArticles[] = $item;
+                }
             }
         }
+
         return $arrayArticles;
     }
 
