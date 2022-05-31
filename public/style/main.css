@@ -2575,7 +2575,7 @@ footer {
 
 @media only screen and (min-width: 768px) {
   .col-sm-6 {
-    width: 100%; } }
+    width: 33%; } }
 
 @media only screen and (max-width: 767px) {
   .navbar-brand {
