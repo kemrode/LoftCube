@@ -19,38 +19,15 @@
                                             <span class="hidden-xs">À la une</span>
                                         </a>
                                     </li>
-<!--                                    <li>-->
-<!--                                        <form action="/Search/searchAround"  class="getCityForm" value="rouen" method="post">-->
-<!--                                            <button type="submit" name="getCity" class="noStyle" value="rouen"/>-->
-<!--                                            <p>Autour de moi</p>-->
-<!--                                        </form>-->
-<!--                                    </li>-->
-<!--                                    <li><a href="#">Autour de moi</a></li>-->
                                 </ul>
-                            </div>
-                            <div class="col-lg-2 col-sm-2 col-xs-4">
-                                <div class="btn-group pull-right bg-clean">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                        Filtrer par <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a onclick="getProductsAndRender('views')"><i
-                                                class="cv cvicon-cv-calender"></i>
-                                            Popularité</a></li>
-                                        <li><a onclick="getProductsAndRender('date')"><i
-                                                class="cv cvicon-cv-calender"></i>
-                                            Récent</a></li>
-                                    </ul>
-                                </div>
-                                <div class="clearfix"></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="cb-content">
-                        <div class="row rowSearch" id="articlelist">
+                        <div class="row" id="articlelist">
                             {% for item in result %}
+                            <!-- TODO : remettre en forme le css -->
                             <div class="col-lg-4 col-sm-6 articleitem" id="article-pattern">
                                 <div class="b-article">
                                     <div class="v-img">
@@ -59,7 +36,7 @@
                                         </a>
                                     </div>
                                     <div class="v-desc">
-                                        <a href="/product/{{ item.id }}"></a>
+                                        <a href="/product/{{ item.id }}">{{ item.name }}</a>
                                     </div>
                                     <div class="v-desc-global">
                                         <p>{{ item.description }}</p>
@@ -78,7 +55,5 @@
     </div>
 </div>
 
-<!--                            {% for key, item in result %}-->
-<!--                            {% endfor %}-->
 
 {% endblock %}

@@ -7,6 +7,7 @@ use App\Core;
 use DateTime;
 use Exception;
 use App\Utility;
+use function Sodium\add;
 
 /**
  * Articles Model
@@ -255,16 +256,63 @@ class Articles extends Model {
         }
     }
 
-    public static function searchAroundMe($city){
+    public static function getAllCitiesAroundMe($city){
         $db = static::getDB();
-        $sql = "SELECT * FROM articles WHERE city =:city";
+        $cityLongitude = self::getCityLongitude($city);
+        $cityLatitude = self::getCityLatitude($city);
+        $test = $cityLongitude[0];
+        $longitude = $test[0];
+        $testLat = $cityLatitude[0];
+        $latitude = $testLat[0];
+        $sql = "SELECT ville_nom_reel FROM villes_france WHERE (6371 * acos(cos(radians('$latitude')) * cos(radians(ville_latitude_deg)) * cos(radians(ville_longitude_deg) - radians('$longitude')) +sin(radians('$latitude')) * sin(radians(ville_latitude_deg)))) < 15";
         try {
             $request = $db->prepare($sql);
-            $request->execute(['city'=>$city]);
-//            var_dump($request->fetchAll());
+            $request->execute();
             return $request->fetchAll();
         } catch (\Exception $e) {
             echo $e;
         }
-}
+    }
+
+    public static function searchAroundMe($cities){
+        $db = static::getDB();
+        $arrayArticles = [];
+        foreach ($cities as $city){
+            $cityName = $city[0];
+            $sql = "SELECT *,CONCAT(LEFT(description,20),'...') as description FROM articles WHERE articles.city =:city";
+            $request = $db->prepare($sql);
+            $request->execute(['city'=>$cityName]);
+            $result = $request->fetchAll();
+            if(count($result) > 0){
+                foreach ($result as $item) {
+                    $arrayArticles[] = $item;
+                }
+            }
+        }
+
+        return $arrayArticles;
+    }
+
+    public static function getCityLongitude($city){
+        $db = static::getDB();
+        $sql = 'SELECT ville_longitude_deg FROM villes_france WHERE ville_nom_reel =:city';
+        try {
+            $request = $db->prepare($sql);
+            $request->execute((['city'=>$city]));
+            return $request->fetchAll();
+        } catch (\Exception $e){
+            echo $e;
+        }
+    }
+    public static function getCityLatitude($city){
+        $db = static::getDB();
+        $sql = 'SELECT ville_latitude_deg FROM villes_france WHERE ville_nom_reel =:city';
+        try {
+            $request = $db->prepare($sql);
+            $request->execute((['city'=>$city]));
+            return $request->fetchAll();
+        } catch (\Exception $e){
+            echo $e;
+        }
+    }
 }

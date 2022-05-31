@@ -16,6 +16,23 @@ class User extends Model {
     /**
      * Crée un utilisateur
      */
+
+    public static function verifUser($data)
+    {
+        $db = static::getDB();
+
+        $stmt = $db->prepare('SELECT COUNT(*) AS "count" FROM users WHERE email = :email;');
+
+        $stmt->bindParam(':email', $data);
+
+        try {
+            $stmt->execute();
+
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        } catch(\Exception $e){
+        }
+    }
+
     public static function createUser($data) {
 
         $db = static::getDB();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Core;
+namespace Tests\App\Controllers;
 
 use App\Controllers\User;
 use App\Utility\Hash;
@@ -22,8 +22,8 @@ class UserTest extends TestCase
         $this->assertEquals($data,$client);
 
     }
-    public function testlogoutAction()
-    {
-
-    }
+//    public function testlogoutAction()
+//    {
+//
+//    }
 }
