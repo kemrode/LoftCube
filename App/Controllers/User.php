@@ -23,7 +23,6 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
-
         if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
             try{
                 $f=[
@@ -33,10 +32,8 @@ class User extends \Core\Controller
 
                 $this->login($f);
                 header('Location: /account');
-
-
             }catch (Exception $e){
-
+                echo $e;
             }
         }
 
@@ -46,13 +43,10 @@ class User extends \Core\Controller
                     'email'=>$_COOKIE['email'],
                     'password'=>$_COOKIE['password'],
                 ];
-
                 $this->login($f);
                 header('Location: /account');
-
-
             }catch (Exception $e){
-
+                echo $e;
             }
         }
         if(isset($_POST['submit'])){
@@ -152,7 +146,7 @@ class User extends \Core\Controller
             return $userID;
         } catch (Exception $ex) {
             // TODO : Set flash if error : utiliser la fonction en dessous
-            /* Utility\Flash::danger($ex->getMessage());*/
+            Utility\Flash::danger($ex->getMessage());
         }
         $this->login($data);
     }
@@ -168,7 +162,6 @@ class User extends \Core\Controller
                 $email = (preg_match($regex, $email))?$email:"invalid email";
                 if($email == 'invalid email'){
                     header('Location: /login?cod=errem');
-                    die();
                     return false;
                 }
                 $user = \App\Models\User::getByLogin($data['email']);
@@ -179,12 +172,11 @@ class User extends \Core\Controller
                     );
                 }else{
                     header('Location: /login?cod=errlog');
-                    die();
                     return false;
                 }
             }else{
                 header('Location: /login?cod=errlog');
-                die();
+                return false;
             }
             return true;
         } catch (Exception $ex) {

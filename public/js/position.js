@@ -15,8 +15,6 @@ function getLocation() {
 function showPosition(position) {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
-    console.log(latitude);
-    console.log(longitude);
     GetLocalisationOfCity().then((response) => {
        let feature = response.features['0'];
        let context = feature.context['2'];
