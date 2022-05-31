@@ -31,7 +31,7 @@ class RouterTest extends TestCase
 
     public function testAdd()
     {
-        $route = "App\Controllers\tests";
+        $route = 'App\Controllers\tests';
         $param = [];
 
         $client = $this->getMockBuilder(Router::class)
@@ -56,22 +56,6 @@ class RouterTest extends TestCase
             ->onlyMethods(['getParams'])
             ->getMock();
         $this->assertNotEmpty($client);
-    }
-
-    public function testMatchFalse(){
-        $urlTest = "";
-        $routesTest = self::getProtectedVar('routes');
-        $paramsTest = self::getProtectedVar('params');
-        $matchTest = self::haveMethod('match');
-        $this->assertEquals(false, $matchTest->invokeArgs(new Router(), [$routesTest, $paramsTest, $urlTest]));
-    }
-
-    public function testMatchTrue(){
-        $urlTest = "login";
-        $routesTest = self::getProtectedVar('routes');
-        $paramsTest = self::getProtectedVar('params');
-        $matchTest = self::haveMethod('match');
-        $this->assertEquals(true, $matchTest->invokeArgs(new Router(), [$routesTest, $paramsTest, $urlTest]));
     }
 
     public function testDispatch(){

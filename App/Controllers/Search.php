@@ -26,7 +26,6 @@ class Search extends \Core\Controller
 
     public function aroundMeSearch($result){
         try {
-            var_dump("ça pue la muerte ici");
             View::renderTemplate('Product/search.html', ["result" => $result]);
         } catch (\Exception $e) {
             echo $e;
@@ -54,11 +53,16 @@ class Search extends \Core\Controller
     public function searchAround() {
         try {
             $city = $_POST['getCity'];
-            $result = Articles::searchAroundMe($city);
-            var_dump("mon résultat est : "+$result);
-            return $this->aroundMeSearch($result);
+            $citiesAroundMe = Articles::getAllCitiesAroundMe($city);
+            $result = Articles::searchAroundMe($citiesAroundMe);
+            if(count($result) == 0 || empty($city)){
+                View::renderTemplate("404.html");
+            } else {
+                return $this->aroundMeSearch($result);
+            }
         } catch (\Exception $e) {
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";
+            View::renderTemplate("404.html");
         }
     }
 

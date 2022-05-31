@@ -23,7 +23,6 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
-
         if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
             try{
                 $f=[
@@ -33,10 +32,8 @@ class User extends \Core\Controller
 
                 $this->login($f);
                 header('Location: /account');
-
-
             }catch (Exception $e){
-
+                echo $e;
             }
         }
 
@@ -46,13 +43,10 @@ class User extends \Core\Controller
                     'email'=>$_COOKIE['email'],
                     'password'=>$_COOKIE['password'],
                 ];
-
                 $this->login($f);
                 header('Location: /account');
-
-
             }catch (Exception $e){
-
+                echo $e;
             }
         }
         if(isset($_POST['submit'])){
@@ -78,20 +72,69 @@ class User extends \Core\Controller
      */
     public function registerAction()
     {
+        if(isset($_GET["code"])){
+            if ( $_GET['code']=='existe'){
+                echo ("<script>alert('L\'email utilisé existe déjà') </script>");
+            }
+            if ( $_GET['code']=='errem'){
+                echo ("<script>alert('L\'email utilisé n\'est pas conforme') </script>");
+            }
+            if ( $_GET['code']=='mdpf'){
+                echo ("<script>alert('Les mots de passe ne sont pas identiques') </script>");
+            }
+            if ( $_GET['code']=='mdpc'){
+                echo ("<script>alert('Mot de passe trop court') </script>");
+            }
+            if ( $_GET['code']=='idf'){
+                echo ("<script>alert('identifiants invalides') </script>");
+            }
+        }
         if(isset($_POST['submit'])){
             try {
                 $f = $_POST;
-                if($f['password'] !== $f['password-check']) {
-                    return null;
+                $email = $f['email'];
+                //regex de vérification des emails
+                $regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
+                $email = (preg_match($regex, $email))?$email:"invalid email";
+                if($email == 'invalid email'){
+                    header('Location: /register?code=errem');
+                    die();
+                }
+                if($f['password'] != $f['password-check']) {
+                    header('Location: /register?code=mdpf');
+                    die();
+                }else{
+                    if(strlen($f['password'])<7 ){
+                        header('Location: /register?code=mdpc');
+                        die();
+                    }else{
+                        $regex_for_text =
+                            '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
+                            'script[^>]*>';
+                        $f['username'] = preg_replace("#$regex_for_text#i",'',$f['username']);
+
+                        if($f['username'] == "" || $f['username'] ==" "){
+                            header('Location: /register?code=idf');
+                            die();
+                        }else{
+                            $verif = \App\Models\User::verifUser($f['email']);
+                            if ($verif['count']==0) {
+                                $this->register($f);
+                                $data = array(
+                                    "email" => $f['email'],
+                                    "password" => $f['password'],
+                                );
+                                $this->login($data);
+                                header('Location: /account');
+                            }
+                            else{
+                                header('Location: /register?code=existe');
+                            }
+                        }
+                    }
+
                 }
                 // validation
-                $this->register($f);
-                $data = array(
-                    "email" => $f['email'],
-                    "password" => $f['password'],
-                );
-                $this->login($data);
-                header('Location: /account');
             } catch(\Exception $e){
                 echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
             }
@@ -136,6 +179,8 @@ class User extends \Core\Controller
     private function register($data)
     {
         try {
+
+
             // Generate a salt, which will be applied to the during the password
             // hashing process.
             $salt = Hash::generateSalt(32);
@@ -152,7 +197,7 @@ class User extends \Core\Controller
             return $userID;
         } catch (Exception $ex) {
             // TODO : Set flash if error : utiliser la fonction en dessous
-            /* Utility\Flash::danger($ex->getMessage());*/
+            Utility\Flash::danger($ex->getMessage());
         }
         $this->login($data);
     }
@@ -160,7 +205,7 @@ class User extends \Core\Controller
     private function login($data){
         try {
             if(isset($data['email']) &&( isset($data['password'])
-                    //   && strlen($data['password'])>7
+                    && strlen($data['password'])>7
                 ) ){
                 $email = $data['email'];
                 //regex de vérification des emails
@@ -168,9 +213,9 @@ class User extends \Core\Controller
                 $email = (preg_match($regex, $email))?$email:"invalid email";
                 if($email == 'invalid email'){
                     header('Location: /login?cod=errem');
-                    die();
                     return false;
                 }
+
                 $user = \App\Models\User::getByLogin($data['email']);
                 if (Hash::generate($data['password'], $user['salt']) == $user['password']) {
                     $_SESSION['user'] = array(
@@ -179,12 +224,11 @@ class User extends \Core\Controller
                     );
                 }else{
                     header('Location: /login?cod=errlog');
-                    die();
                     return false;
                 }
             }else{
                 header('Location: /login?cod=errlog');
-                die();
+                return false;
             }
             return true;
         } catch (Exception $ex) {

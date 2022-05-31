@@ -25,7 +25,7 @@
     <link href="/style/_customBootstrap.scss" rel="stylesheet">
 
 </head>
-<body>
+<body style="width:border-box">
 <!-- logo, menu, search, avatar -->
 <div class="container-fluid  ">
     <div class="row " >
@@ -35,30 +35,37 @@
                     <div class="col-xs-3  visible-xs " >
                         <a href="#" class="btn-menu-toggle"><i class="cv cvicon-cv-menu"></i></a>
                     </div>
+
                     <div class="col-lg-1 col-sm-2 col-xs-6">
                         <a class="navbar-brand" href="/">
                             <img src="/images/logo.png" alt="Vide Grenier en ligne" class="logo" />
                             <span>Vide Grenier en ligne</span>
                         </a>
                     </div>
+
                     <div class="col-lg-3 col-sm-10 hidden-xs">
                         <ul class="list-inline menu">
                             <li class="color-active"><a href="/product">Déposer une annonce</a></li>
                         </ul>
                     </div>
-
+                    </div>
+<div class="row " style=" margin-right: auto;margin-left: auto">
                     <div class="col-lg-6 col-sm-8 col-xs-3 ">
                         <form action="/Search/searchingObject" method="post">
                             <div class="topsearch">
                                 <i class="cv cvicon-cv-cancel topsearch-close"></i>
                                 <div class="input-group">
-                                    <span class="input-group-addon" id="sizing-addon2"><i class="fa fa-search"></i></span>
+
+                                    <span class="input-group-addon" id="sizing-addon2"><i class="fa fa-search"> </i></span>
                                     <input type="text" name="submit" class="form-control" placeholder="Rechercher..."
                                            aria-describedby="sizing-addon2">
                                 </div>
+                                <br>
+
                             </div>
                         </form>
                     </div>
+</div>
 
                     {% if user is not null %}
 
@@ -103,7 +110,8 @@
         </a>
     </div>
     <div class="mobile-menu-content">
-        <a href="/product" class="btn mobile-menu-upload">
+<!--        <a href="/product" class="btn mobile-menu-upload">-->
+        <a href="Product/Add.html" class="btn mobile-menu-upload">
             <span>Déposer une annonce</span>
         </a>
 
@@ -139,10 +147,12 @@
 
     </div>
 </div>
+<br><br>
 
     {% block body %}{% endblock %}
     {% block search %}{% endblock %}
-<footer class="text-center text-lg-start text-muted ">
+
+<footer class="text-center text-lg-start text-muted " style="width: 100%">
         <div class="container-fluid">
             <div class="row">
                 <div class="container padding-def">
