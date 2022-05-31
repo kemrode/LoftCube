@@ -62,6 +62,7 @@ class Search extends \Core\Controller
             }
         } catch (\Exception $e) {
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";
+            View::renderTemplate("404.html");
         }
     }
 
