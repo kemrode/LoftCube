@@ -2,9 +2,6 @@ var latitude;
 var longitude;
 var getCity = document.querySelector('.noStyle');
 
-// getCity.addEventListener('click', () => {
-//     getLocation();
-// })
 getLocation();
 
 function getLocation() {
@@ -20,9 +17,14 @@ function showPosition(position) {
     longitude = position.coords.longitude;
     GetLocalisationOfCity().then((response) => {
        let feature = response.features['0'];
-       console.log(feature);
-       let context = feature.context['2'];
-       getCity.value = context.text;
+       let context = feature.context;
+       for(var item of context){
+           var idFind = item.id;
+           if(idFind.includes("place.")){
+               console.log((item.text));
+               getCity.value = item.text;
+           }
+       }
     }).catch((error) => {
         console.error(error);
     });
