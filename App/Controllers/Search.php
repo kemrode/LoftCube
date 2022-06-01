@@ -51,18 +51,21 @@ class Search extends \Core\Controller
     }
 
     public function searchAround() {
-        try {
-            $city = $_POST['getCity'];
-            $citiesAroundMe = Articles::getAllCitiesAroundMe($city);
-            $result = Articles::searchAroundMe($citiesAroundMe);
-            if(count($result) == 0){
-                View::renderTemplate("404.html");
-            } else {
-                return $this->aroundMeSearch($result);
+        $city = $_POST['getCity'];
+        if ($_POST['getCity'] ==""){
+            View::renderTemplate("404.html");
+        }else{
+            try {
+                $citiesAroundMe = Articles::getAllCitiesAroundMe($city);
+                $result = Articles::searchAroundMe($citiesAroundMe);
+                if(count($result) == 0){
+                    View::renderTemplate("404.html");
+                } else {
+                    return $this->aroundMeSearch($result);
+                }
+            } catch (\Exception $e) {
+                echo "<script>console.log('Debug Objects:" . $e ."');</script>";
             }
-        } catch (\Exception $e) {
-            echo "<script>console.log('Debug Objects:" . $e ."');</script>";
         }
     }
-
 }

@@ -19,6 +19,23 @@ class Product extends \Core\Controller
      */
     public function indexAction()
     {
+        if(isset($_POST['keyword'])) {
+            $text =  Articles::autocomplete($_POST['keyword']);
+            $i=0;
+           $datalist= ('<datalist id="browsers">');
+            foreach ($text as $city){
+                if(strlen($_POST['keyword'])  >1){
+                    $datalist.= ('<option value=" '.$text[$i]["ville_nom_reel"].'"> ');
+                    $i++;
+                }
+            }
+            $datalist.=('<datalist id="browsers">');
+echo $datalist;
+            die();
+        }
+
+
+
         if (isset($_GET["code"])){
             echo('<script>alert("Certains champs n\'ont pas été saisis") </script>' );
 
@@ -60,7 +77,7 @@ class Product extends \Core\Controller
             View::renderTemplate('Product/Add.html');
 
         }
-            }
+    }
 
     /**
      * Affiche la page d'un produit
