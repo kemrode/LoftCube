@@ -6,6 +6,7 @@ use App\Models\Articles;
 use App\Utility\Upload;
 use \Core\View;
 use \Core\SendMail;
+use App\Utility\Regex;
 
 /**
  * Product controller
@@ -17,6 +18,7 @@ class Product extends \Core\Controller
      * Affiche la page d'ajout
      * @return void
      */
+
     public function indexAction()
     {
         if(isset($_POST['keyword'])) {
@@ -95,11 +97,8 @@ class Product extends \Core\Controller
             $article = Articles::getOne($id);
 
             if (isset($_POST['messageMailContact']) && $_POST['messageMailContact'] <> ''){
-                //Ajout de la sécurité JS
-                $regex_for_text =
-                    '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
-                    'script[^>]*>';
-                $messagePourMail = preg_replace("#$regex_for_text#i",'',$_POST['messageMailContact']);
+
+                $messagePourMail = Regex::regexAntiScript($_POST['messageMailContact']) ;
 
                 $resultSendMail = SendMail::sendOneMail($article[0]["email"], 'Nouveau message concernant votre annonce "' . $article[0]["name"] .'" !', $messagePourMail);
 
