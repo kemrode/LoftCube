@@ -6,18 +6,26 @@ namespace App\Utility;
 
 class Cookie
 {
-    public static function setCookies($data , $string)
+    public static function setCookies($data, $username, $id)
     {
-        setcookie('visitorLogged',true,time()+86400);
-        setcookie("email",$data,time()+86400);
-        setcookie("password",$string,time()+86400);
+        setcookie('visitorLogged',true,time()+ 60 * 60 * 24);
+        setcookie("email",$data,time()+ 60 * 60 * 24);
+        setcookie("username",$username,time()+ 60 * 60 * 24);
+        setcookie("id",$id,time()+86400);
 
     }
-    public static function delCookies($data , $string)
+    public static function delCookies()
     {
-        setcookie('visitorLogged',true,time()+86400);
-        setcookie("email",$data,time()+86400);
-        setcookie("password",$string,time()+86400);
+        unset($_COOKIE["visitorLogged"]);
+        setcookie('visitorLogged',true,time() - 3600);
+        unset($_COOKIE["email"]);
+        setcookie("email","",time() - 3600);
+        unset($_COOKIE["username"]);
+        setcookie("username","",time() - 3600);
+        unset($_COOKIE["id"]);
+        setcookie("id","",time() - 3600);
+
+
 
     }
     public static function delCookies2()

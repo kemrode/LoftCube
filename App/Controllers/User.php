@@ -25,22 +25,10 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
-        if (isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"]){
+        if ((isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"]) || (isset($_SESSION['user']['username']))){
             header('Location: /');
         }
 
-        if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
-            try{
-                $f=[
-                    'email'=>$_COOKIE['email'],
-                    'password'=>$_COOKIE['password'],
-                ];
-                $this->login($f);
-                header('Location: /account');
-            }catch (Exception $e){
-                echo $e;
-            }
-        }
         if(isset($_POST['submit'])){
             try{
                 // Si login OK, redirige vers le compte
@@ -53,9 +41,9 @@ class User extends \Core\Controller
             }
         }
 
-        $valueEmail = (isset($_POST["email"]) && !isEmpty($_POST["email"])) ? $_POST["email"] : "";
-        View::renderTemplate('User/login.html', [
-            'valueEmail' => $valueEmail
+        $valueemail = (isset($_GET["email"])) ? $_GET["email"] : "";
+        View::renderTemplate('User/login.html',[
+            'emailValue' => $valueemail
         ]);
     }
 
@@ -214,24 +202,22 @@ class User extends \Core\Controller
 
                     //Si l'utilisateur souhaite sauvegarder sa session par cookie :
                     if(isset($data['checkbox'])&&$data['checkbox'] == true){
-                        Cookie::setCookies($data['email'],$data['password'],$_SESSION["user"]["username"], $_SESSION["user"]["id"]);
+                        Cookie::setCookies($data['email'], $_SESSION["user"]["username"], $_SESSION["user"]["id"]);
 
                     }
 
-
-
                     return true;
                 }else{
-                    header('Location: /login?cod=errlog');
+                    header('Location: /login?cod=errlog&email=' . $data['email']);
                     return false;
                 }
             }else{
-                header('Location: /login?cod=errlog');
+                header('Location: /login?cod=errlog&email=' . $data['email']);
                 return false;
             }
             return true;
         } catch (Exception $ex) {
-            header('Location: /login?cod=errlog');
+            header('Location: /login?cod=errlog&email=' . $data['email']);
             die();
             // TODO : Set flash if error
             /* Utility\Flash::danger($ex->getMessage());*/
