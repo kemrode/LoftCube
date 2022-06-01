@@ -40,6 +40,7 @@ $router = new Core\Router();
 // Add the routes
 $router->add('', ['controller' => 'Home', 'action' => 'index']);
 $router->add('login', ['controller' => 'User', 'action' => 'login']);
+$router->add('passwordrecovery', ['controller' => 'User', 'action' => 'passwordrecovery']);
 $router->add('register', ['controller' => 'User', 'action' => 'register']);
 $router->add('logout', ['controller' => 'User', 'action' => 'logout', 'private' => true]);
 $router->add('account', ['controller' => 'User', 'action' => 'account', 'private' => true]);
