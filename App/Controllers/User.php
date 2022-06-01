@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Config;
 use App\Model\UserRegister;
 use App\Models\Articles;
+use App\Utility\Cookie;
 use App\Utility\Hash;
 use App\Utility\Session;
 use \Core\View;
@@ -30,7 +31,6 @@ class User extends \Core\Controller
                     'email'=>$_COOKIE['email'],
                     'password'=>$_COOKIE['password'],
                 ];
-
                 $this->login($f);
                 header('Location: /account');
             }catch (Exception $e){
@@ -54,9 +54,7 @@ class User extends \Core\Controller
             try{
                 $f = $_POST;
                 if(isset($_POST['checkbox'])&&$_POST['checkbox'] == true){
-                    setcookie('visitorLogged',true,time()+86400);
-                    setcookie("email",$f['email'],time()+86400);
-                    setcookie("password",$f['password'],time()+86400);
+                    Cookie::setCookies($f['email'],$f['password']) ;
                 }
                 $this->login($f);
                 // Si login OK, redirige vers le compte
@@ -139,6 +137,9 @@ class User extends \Core\Controller
             View::renderTemplate('User/register.html');
         }
     }
+
+
+
     /**
      * Affiche la page du compte
      */
@@ -164,6 +165,9 @@ class User extends \Core\Controller
             'arg' => $arg,
         ]);
     }
+
+
+
     /*
      * Fonction privée pour enregister un utilisateur
      */
@@ -191,6 +195,8 @@ class User extends \Core\Controller
         $this->login($data);
     }
 
+
+
     private function login($data){
         try {
             if(isset($data['email']) &&( isset($data['password'])
@@ -203,7 +209,6 @@ class User extends \Core\Controller
                     header('Location: /login?cod=errem');
                     return false;
                 }
-
                 $user = \App\Models\User::getByLogin($email);
                 if (Hash::generate($data['password'], $user['salt']) == $user['password']) {
                     $_SESSION['user'] = array(
@@ -236,19 +241,12 @@ class User extends \Core\Controller
     public function logoutAction() {
         try{
             if (isset($_COOKIE)){
-                setcookie("email","", time()-3600);
-                unset($_COOKIE['email']);
-                setcookie("password","", time()-3600);
-                unset($_COOKIE['password']);
+                Cookie::delCookies() ;
             }
             // Destroy all data registered to the session.
             $_SESSION = array();
             if (ini_get("session.use_cookies")) {
-                $params = session_get_cookie_params();
-                setcookie(session_name(), '', time() - 42000,
-                    $params["path"], $params["domain"],
-                    $params["secure"], $params["httponly"]
-                );
+                Cookie::delCookies2() ;
             }
             session_destroy();
             header ("Location: /");
