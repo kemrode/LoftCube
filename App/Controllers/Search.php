@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Articles;
+use App\Models\Cities;
 use Core\View;
 use Exception;
 
@@ -24,7 +25,7 @@ class Search extends \Core\Controller
         }
     }
 
-    public function aroundMeSearch($result){
+    public function aroundMeSearchResultView($result){
         try {
             View::renderTemplate('Product/search.html', ["result" => $result]);
         } catch (\Exception $e) {
@@ -53,12 +54,12 @@ class Search extends \Core\Controller
     public function searchAround() {
         try {
             $city = $_POST['getCity'];
-            $citiesAroundMe = Articles::getAllCitiesAroundMe($city);
+            $citiesAroundMe = Cities::getAllCitiesAroundMe($city);
             $result = Articles::searchAroundMe($citiesAroundMe);
             if(count($result) == 0 || empty($city)){
                 View::renderTemplate("404.html");
             } else {
-                return $this->aroundMeSearch($result);
+                return $this->aroundMeSearchResultView($result);
             }
         } catch (\Exception $e) {
             echo "<script>console.log('Debug Objects:" . $e ."');</script>";

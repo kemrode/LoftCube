@@ -5,12 +5,14 @@ namespace App\Controllers;
 use App\Config;
 use App\Model\UserRegister;
 use App\Models\Articles;
+use App\Utility\Cookie;
 use App\Utility\Hash;
 use App\Utility\Session;
 use \Core\View;
 use Exception;
 use http\Env\Request;
 use http\Exception\InvalidArgumentException;
+use App\Utility\Regex;
 
 /**
  * User controller
@@ -23,48 +25,26 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
-        if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
-            try{
-                $f=[
-                    'email'=>$_COOKIE['email'],
-                    'password'=>$_COOKIE['password'],
-                ];
-
-                $this->login($f);
-                header('Location: /account');
-            }catch (Exception $e){
-                echo $e;
-            }
+        if ((isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"]) || (isset($_SESSION['user']['username']))){
+            header('Location: /');
         }
 
-        if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
-            try{
-                $f=[
-                    'email'=>$_COOKIE['email'],
-                    'password'=>$_COOKIE['password'],
-                ];
-                $this->login($f);
-                header('Location: /account');
-            }catch (Exception $e){
-                echo $e;
-            }
-        }
         if(isset($_POST['submit'])){
             try{
-                $f = $_POST;
-                if(isset($_POST['checkbox'])&&$_POST['checkbox'] == true){
-                    setcookie('visitorLogged',true,time()+86400);
-                    setcookie("email",$f['email'],time()+86400);
-                    setcookie("password",$f['password'],time()+86400);
-                }
-                $this->login($f);
                 // Si login OK, redirige vers le compte
-                header('Location: /account');
+                if ($this->login($_POST)){
+                    header('Location: /account');
+                }
+
             } catch(\Exception $e){
                 echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
             }
         }
-        View::renderTemplate('User/login.html');
+
+        $valueemail = (isset($_GET["email"])) ? $_GET["email"] : "";
+        View::renderTemplate('User/login.html',[
+            'emailValue' => $valueemail
+        ]);
     }
 
     /**
@@ -94,8 +74,8 @@ class User extends \Core\Controller
                 $f = $_POST;
                 $email = $f['email'];
                 //regex de vérification des emails
-                $regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
-                $email = (preg_match($regex, $email))?$email:"invalid email";
+                $email = Regex::regexEmail($email);
+
                 if($email == 'invalid email'){
                     header('Location: /register?code=errem');
                     die();
@@ -108,10 +88,7 @@ class User extends \Core\Controller
                         header('Location: /register?code=mdpc');
                         die();
                     }else{
-                        $regex_for_text =
-                            '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
-                            'script[^>]*>';
-                        $f['username'] = preg_replace("#$regex_for_text#i",'',$f['username']);
+                        $f['username']= Regex::regexAntiScript($f['username']) ;
 
                         if($f['username'] == "" || $f['username'] ==" "){
                             header('Location: /register?code=idf');
@@ -149,8 +126,8 @@ class User extends \Core\Controller
     {
         try{
             $articles = Articles::getByUser($_SESSION['user']['id']);
-            $count = Articles::getcountByUser($_SESSION['user']['id']);
-            $countview = Articles::getcountviewByUser($_SESSION['user']['id']);
+            $count = is_null(Articles::getcountByUser($_SESSION['user']['id'])) ? 0 : Articles::getcountByUser($_SESSION['user']['id']);
+            $countview = is_null(Articles::getcountviewByUser($_SESSION['user']['id'])) ? 0 : Articles::getcountviewByUser($_SESSION['user']['id']);
             if(isset($_GET['arg'])&& ($_GET['arg'] == 'pop' ||($_GET['arg'] == 'rec' ))){
                 $arg =$_GET['arg'];
 
@@ -166,8 +143,8 @@ class User extends \Core\Controller
 
         View::renderTemplate('User/account.html', [
             'articles' => $articles,
-            'nb_art' => $count['nb_art'],
-            'nb_vue' => $countview['nb_vue'],
+            'nb_art' => $count,
+            'nb_vue' => $countview,
             'arg' => $arg,
 
         ]);
@@ -209,8 +186,8 @@ class User extends \Core\Controller
                 ) ){
                 $email = $data['email'];
                 //regex de vérification des emails
-                $regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
-                $email = (preg_match($regex, $email))?$email:"invalid email";
+                $email = Regex::regexEmail($data['email']);
+
                 if($email == 'invalid email'){
                     header('Location: /login?cod=errem');
                     return false;
@@ -222,17 +199,25 @@ class User extends \Core\Controller
                         'id' => $user['id'],
                         'username' => $user['username']
                     );
+
+                    //Si l'utilisateur souhaite sauvegarder sa session par cookie :
+                    if(isset($data['checkbox'])&&$data['checkbox'] == true){
+                        Cookie::setCookies($data['email'], $_SESSION["user"]["username"], $_SESSION["user"]["id"]);
+
+                    }
+
+                    return true;
                 }else{
-                    header('Location: /login?cod=errlog');
+                    header('Location: /login?cod=errlog&email=' . $data['email']);
                     return false;
                 }
             }else{
-                header('Location: /login?cod=errlog');
+                header('Location: /login?cod=errlog&email=' . $data['email']);
                 return false;
             }
             return true;
         } catch (Exception $ex) {
-            header('Location: /login?cod=errlog');
+            header('Location: /login?cod=errlog&email=' . $data['email']);
             die();
             // TODO : Set flash if error
             /* Utility\Flash::danger($ex->getMessage());*/
@@ -248,19 +233,12 @@ class User extends \Core\Controller
     public function logoutAction() {
         try{
             if (isset($_COOKIE)){
-                setcookie("email","", time()-3600);
-                unset($_COOKIE['email']);
-                setcookie("password","", time()-3600);
-                unset($_COOKIE['password']);
+                Cookie::delCookies() ;
             }
             // Destroy all data registered to the session.
             $_SESSION = array();
             if (ini_get("session.use_cookies")) {
-                $params = session_get_cookie_params();
-                setcookie(session_name(), '', time() - 42000,
-                    $params["path"], $params["domain"],
-                    $params["secure"], $params["httponly"]
-                );
+                Cookie::delCookies2() ;
             }
             session_destroy();
             header ("Location: /");

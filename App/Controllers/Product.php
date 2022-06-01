@@ -6,6 +6,7 @@ use App\Models\Articles;
 use App\Utility\Upload;
 use \Core\View;
 use \Core\SendMail;
+use App\Utility\Regex;
 
 /**
  * Product controller
@@ -17,8 +18,26 @@ class Product extends \Core\Controller
      * Affiche la page d'ajout
      * @return void
      */
+
     public function indexAction()
     {
+        if(isset($_POST['keyword'])) {
+            $text =  Articles::autocomplete($_POST['keyword']);
+            $i=0;
+           $datalist= ('<datalist id="browsers">');
+            foreach ($text as $city){
+                if(strlen($_POST['keyword'])  >1){
+                    $datalist.= ('<option value=" '.$text[$i]["ville_nom_reel"].'"> ');
+                    $i++;
+                }
+            }
+            $datalist.=('<datalist id="browsers">');
+            echo $datalist;
+            die();
+        }
+
+
+
         if (isset($_GET["code"])){
             echo('<script>alert("Certains champs n\'ont pas été saisis") </script>' );
 
@@ -33,6 +52,7 @@ class Product extends \Core\Controller
                     $f['user_id'] = $_SESSION['user']['id'];
                     $id = Articles::save($f);
                     $pictureName = Upload::uploadFile($_FILES['picture'], $id);
+
                     Articles::attachPicture($id, $pictureName);
 
                     if ($id != ""){
@@ -55,12 +75,13 @@ class Product extends \Core\Controller
             }
             catch
             (\Exception $e){
+                throw new \Exception("Une erreur c'est produite. Détail de l'erreur : " . $e);
             }
         }else{
             View::renderTemplate('Product/Add.html');
 
         }
-            }
+    }
 
     /**
      * Affiche la page d'un produit
@@ -71,25 +92,13 @@ class Product extends \Core\Controller
         $id = $this->route_params['id'];
 
         try {
-            if (isset($_POST['messageMailContact']) && $_POST['messageMailContact'] <> ''){
-                //$resultSendMail = SendMail::sendOneMail('buland2001@gmail.com', 'Nouveau message concernant votre annonce !', $_POST['messageMailContact']);
-                $resultSendMail = 'OK';
-
-            } else {
-                $resultSendMail = "";
-            }
-
-
             Articles::addOneView($id);
             $suggestions = Articles::getSuggest();
             $article = Articles::getOne($id);
 
             if (isset($_POST['messageMailContact']) && $_POST['messageMailContact'] <> ''){
-                //Ajout de la sécurité JS
-                $regex_for_text =
-                    '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
-                    'script[^>]*>';
-                $messagePourMail = preg_replace("#$regex_for_text#i",'',$_POST['messageMailContact']);
+
+                $messagePourMail = Regex::regexAntiScript($_POST['messageMailContact']) ;
 
                 $resultSendMail = SendMail::sendOneMail($article[0]["email"], 'Nouveau message concernant votre annonce "' . $article[0]["name"] .'" !', $messagePourMail);
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Utility\Regex;
 use Core\Model;
 use App\Core;
 use DateTime;
@@ -133,10 +134,10 @@ class Articles extends Model {
         SELECT COUNT(*) as nb_art FROM articles WHERE user_id = ?');
         try{
             $stmt->execute([$id]);
-            $e = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $value = $stmt->fetch(\PDO::FETCH_ASSOC);
 
 
-            return $e;
+            return $value['nb_art'];
         } catch(\Exception $e){
 
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
@@ -150,10 +151,9 @@ class Articles extends Model {
         SELECT SUM(views) as nb_vue FROM articles WHERE user_id = ?');
         try{
             $stmt->execute([$id]);
-            $e = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $value = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-
-            return $e;
+            return $value['nb_vue'];
         } catch(\Exception $e){
 
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
@@ -184,7 +184,24 @@ class Articles extends Model {
 
         }
     }
+    public static function autocomplete($data)
+    {
+            $db = static::getDB();
+            $sql = "SELECT ville_nom_reel FROM villes_france WHERE ville_nom_reel like  :city limit 3;";
+            $stmt = $db->prepare($sql);
+            $city = $data . "%";
 
+            $stmt->bindParam("city", $city);
+
+            try {
+                $stmt->execute();
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            } catch (\Exception $e) {
+                echo $e;
+            }
+
+
+    }
 
 
     /**
@@ -194,12 +211,10 @@ class Articles extends Model {
      * @throws Exception
      */
     public static function save($data) {
-        $regex_for_text =
-            '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
-            'script[^>]*>';
-        $data['name'] = preg_replace("#$regex_for_text#i",'',$data['name']);
-        $data['description'] = preg_replace("#$regex_for_text#i",'',$data['description']);
-        $data['city'] = preg_replace("#$regex_for_text#i",'',$data['city']);
+
+        $data['name'] = Regex::regexEmail($data['name']);
+        $data['description'] = Regex::regexEmail($data['description']);
+        $data['city'] = Regex::regexEmail($data['city']);
 
       if ( isset($data['name']) && isset($data['description']) && isset($data['user_id']) && isset($data['city'])
           && $data['name']!="" && $data['description']!="" && $data['city']!="" && $data['user_id']!="") {
@@ -256,24 +271,6 @@ class Articles extends Model {
         }
     }
 
-    public static function getAllCitiesAroundMe($city){
-        $db = static::getDB();
-        $cityLongitude = self::getCityLongitude($city);
-        $cityLatitude = self::getCityLatitude($city);
-        $test = $cityLongitude[0];
-        $longitude = $test[0];
-        $testLat = $cityLatitude[0];
-        $latitude = $testLat[0];
-        $sql = "SELECT ville_nom_reel FROM villes_france WHERE (6371 * acos(cos(radians('$latitude')) * cos(radians(ville_latitude_deg)) * cos(radians(ville_longitude_deg) - radians('$longitude')) +sin(radians('$latitude')) * sin(radians(ville_latitude_deg)))) < 15";
-        try {
-            $request = $db->prepare($sql);
-            $request->execute();
-            return $request->fetchAll();
-        } catch (\Exception $e) {
-            echo $e;
-        }
-    }
-
     public static function searchAroundMe($cities){
         $db = static::getDB();
         $arrayArticles = [];
@@ -291,28 +288,5 @@ class Articles extends Model {
         }
 
         return $arrayArticles;
-    }
-
-    public static function getCityLongitude($city){
-        $db = static::getDB();
-        $sql = 'SELECT ville_longitude_deg FROM villes_france WHERE ville_nom_reel =:city';
-        try {
-            $request = $db->prepare($sql);
-            $request->execute((['city'=>$city]));
-            return $request->fetchAll();
-        } catch (\Exception $e){
-            echo $e;
-        }
-    }
-    public static function getCityLatitude($city){
-        $db = static::getDB();
-        $sql = 'SELECT ville_latitude_deg FROM villes_france WHERE ville_nom_reel =:city';
-        try {
-            $request = $db->prepare($sql);
-            $request->execute((['city'=>$city]));
-            return $request->fetchAll();
-        } catch (\Exception $e){
-            echo $e;
-        }
     }
 }
