@@ -258,7 +258,7 @@ class Articles extends Model {
 
     public static function searchByWording($object) {
         $db = static::getDB();
-        $sql = "SELECT * FROM articles WHERE name LIKE :name OR description LIKE :description";
+        $sql = "SELECT *,CONCAT(LEFT(description,20),'...') as description FROM articles WHERE name LIKE :name OR description LIKE :description";
         try {
             $request = $db->prepare($sql);
             $request->execute([

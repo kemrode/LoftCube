@@ -73,4 +73,23 @@ class User extends Model {
 
         }
     }
+
+    public static function updatePasswordFromEmail($email, $password, $salt){
+        $db = static::getDB();
+
+        $stmt = $db->prepare('UPDATE users SET password = :password, salt = :salt WHERE email = :email');
+
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':salt', $salt);
+        $stmt->bindParam(':email', $email);
+
+        try{
+            $stmt->execute();
+            return true;
+        } catch(\Exception $e){
+            //Todo : Exception
+
+        }
+        return false;
+    }
 }

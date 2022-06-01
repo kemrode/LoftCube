@@ -852,7 +852,9 @@ video {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap; }
+    flex-wrap: wrap;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
     @media only screen and (min-width: 768px) {
       .b-article .v-desc-global {
         width: 50%;

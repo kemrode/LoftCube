@@ -203,6 +203,8 @@
     flex-direction: column;
     justify-content: center;
     flex-wrap: wrap;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     @media only screen and(min-width: 768px) {
       width: 50%;
       align-items: center;
@@ -257,9 +259,6 @@
     }
   }
 }
-
-
-
 
 .chanels-row {
   [class^='col-']:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)) {

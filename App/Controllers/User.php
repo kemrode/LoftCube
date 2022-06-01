@@ -13,6 +13,7 @@ use Exception;
 use http\Env\Request;
 use http\Exception\InvalidArgumentException;
 use App\Utility\Regex;
+use \Core\SendMail;
 
 /**
  * User controller
@@ -25,6 +26,22 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
+        if (isset($_GET["code"])){
+            switch ($_GET["code"]){
+                case "errem":
+                    $messageErreur = "Erreur : l'email utilisé n'est pas conforme";
+                    break;
+                case "errlog":
+                    $messageErreur = "Erreur : email ou mot de passe incorrect";
+                    break;
+                default:
+                    $messageErreur = "Erreur : Cette erreur n'est pas référencée !";
+                    break;
+            }
+        } else {
+            $messageErreur = "";
+        }
+
         if ((isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"]) || (isset($_SESSION['user']['username']))){
             header('Location: /');
         }
@@ -42,8 +59,10 @@ class User extends \Core\Controller
         }
 
         $valueemail = (isset($_GET["email"])) ? $_GET["email"] : "";
+
         View::renderTemplate('User/login.html',[
-            'emailValue' => $valueemail
+            'emailValue' => $valueemail,
+            'messageErreur' => $messageErreur
         ]);
     }
 
@@ -52,23 +71,34 @@ class User extends \Core\Controller
      */
     public function registerAction()
     {
-        if(isset($_GET["code"])){
-            if ( $_GET['code']=='existe'){
-                echo ("<script>alert('L\'email utilisé existe déjà') </script>");
+        if (isset($_GET["code"])){
+            switch ($_GET["code"]){
+                case "existe":
+                    $messageErreur = "Erreur : Cette adresse email est déjà utilisé";
+                    break;
+                case "errem":
+                    $messageErreur = "Erreur : l'email utilisé n'est pas conforme";
+                    break;
+                case "errlog":
+                    $messageErreur = "Erreur : email ou mot de passe incorrect";
+                    break;
+                case "mdpf":
+                    $messageErreur = "Erreur : Les deux mots de passes ne sont pas identiques";
+                    break;
+                case "mdpc":
+                    $messageErreur = "Erreur : Votre mot de passe est trop court";
+                    break;
+                case "idf":
+                    $messageErreur = "Erreur : Identifiant non valide";
+                    break;
+                default:
+                    $messageErreur = "Erreur : Cette erreur n'est pas référencée !";
+                    break;
             }
-            if ( $_GET['code']=='errem'){
-                echo ("<script>alert('L\'email utilisé n\'est pas conforme') </script>");
-            }
-            if ( $_GET['code']=='mdpf'){
-                echo ("<script>alert('Les mots de passe ne sont pas identiques') </script>");
-            }
-            if ( $_GET['code']=='mdpc'){
-                echo ("<script>alert('Mot de passe trop court') </script>");
-            }
-            if ( $_GET['code']=='idf'){
-                echo ("<script>alert('identifiants invalides') </script>");
-            }
+        } else {
+            $messageErreur = "";
         }
+
         if(isset($_POST['submit'])){
             try {
                 $f = $_POST;
@@ -77,21 +107,21 @@ class User extends \Core\Controller
                 $email = Regex::regexEmail($email);
 
                 if($email == 'invalid email'){
-                    header('Location: /register?code=errem');
+                    header('Location: /register?code=errem&username=' . $_POST["username"]);
                     die();
                 }
                 if($f['password'] != $f['password-check']) {
-                    header('Location: /register?code=mdpf');
+                    header('Location: /register?code=mdpf&username=' . $_POST["username"] . '&email=' . $_POST["email"]);
                     die();
                 }else{
                     if(strlen($f['password'])<7 ){
-                        header('Location: /register?code=mdpc');
+                        header('Location: /register?code=mdpc&username=' . $_POST["username"] . '&email=' . $_POST["email"]);
                         die();
                     }else{
                         $f['username']= Regex::regexAntiScript($f['username']) ;
 
                         if($f['username'] == "" || $f['username'] ==" "){
-                            header('Location: /register?code=idf');
+                            header('Location: /register?code=idf&email=' . $_POST["email"]);
                             die();
                         }else{
                             $verif = \App\Models\User::verifUser($f['email']);
@@ -105,7 +135,7 @@ class User extends \Core\Controller
                                 header('Location: /account');
                             }
                             else{
-                                header('Location: /register?code=existe');
+                                header('Location: /register?code=existe&username=' . $_POST["username"]);
                             }
                         }
                     }
@@ -116,7 +146,13 @@ class User extends \Core\Controller
                 echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
             }
         }else{
-            View::renderTemplate('User/register.html');
+            $valueUsername= (isset($_GET["username"])) ? $_GET["username"] : "";
+            $valueEmail = (isset($_GET["email"])) ? $_GET["email"] : "";
+            View::renderTemplate('User/register.html', [
+                "messageErreur" => $messageErreur,
+                "usernameValue" => $valueUsername,
+                "emailValue" => $valueEmail
+            ]);
         }
     }
     /**
@@ -156,8 +192,6 @@ class User extends \Core\Controller
     private function register($data)
     {
         try {
-
-
             // Generate a salt, which will be applied to the during the password
             // hashing process.
             $salt = Hash::generateSalt(32);
@@ -189,7 +223,7 @@ class User extends \Core\Controller
                 $email = Regex::regexEmail($data['email']);
 
                 if($email == 'invalid email'){
-                    header('Location: /login?cod=errem');
+                    header('Location: /login?code=errem');
                     return false;
                 }
 
@@ -208,16 +242,16 @@ class User extends \Core\Controller
 
                     return true;
                 }else{
-                    header('Location: /login?cod=errlog&email=' . $data['email']);
+                    header('Location: /login?code=errlog&email=' . $data['email']);
                     return false;
                 }
             }else{
-                header('Location: /login?cod=errlog&email=' . $data['email']);
+                header('Location: /login?code=errlog&email=' . $data['email']);
                 return false;
             }
             return true;
         } catch (Exception $ex) {
-            header('Location: /login?cod=errlog&email=' . $data['email']);
+            header('Location: /login?code=errlog&email=' . $data['email']);
             die();
             // TODO : Set flash if error
             /* Utility\Flash::danger($ex->getMessage());*/
@@ -246,5 +280,66 @@ class User extends \Core\Controller
         } catch(\Exception $e){
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
         }
+    }
+
+    /**
+     * Affiche la page du compte
+     */
+    public function passwordrecoveryAction()
+    {
+        try{
+
+            if (isset($_POST["email"]) && !empty($_POST["email"])){
+                $email = Regex::regexEmail($_POST['email']);
+
+                if($email == 'invalid email'){
+                    View::renderTemplate('User/passwordrecovery.html',[
+                        'messageErreur' => "L'adresse email n'est pas valide"
+                    ]);
+                }
+
+                //Création du mot de passe aléatoire :
+                $comb = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+                $pass = array();
+                $combLen = strlen($comb) - 1;
+                for ($i = 0; $i < 12; $i++) {
+                    $n = rand(0, $combLen);
+                    $pass[] = $comb[$n];
+                }
+
+                $messagePourMail = "Voici votre nouveau mot de passe : " . implode($pass);
+
+                $salt = Hash::generateSalt(32);
+
+                $newPassword = Hash::generate(implode($pass), $salt);
+
+                var_dump("Password = " . $newPassword);
+                var_dump("Salt = " . $salt);
+
+                if(\App\Models\User::updatePasswordFromEmail($_POST["email"], $newPassword, $salt)){
+                    $resultSendMail = SendMail::sendOneMail($_POST["email"], 'Réinitialisation de votre mot de passe !', $messagePourMail);
+
+                    if ($resultSendMail){
+                        View::renderTemplate('User/passwordrecovery.html', [
+                            "messageSucces" => "Un nouveau mot de passe a été généré, si cette adresse email est lié à un compte, vous recevrez le message dans quelques instants."
+                        ]);
+                    }
+                } else {
+                    View::renderTemplate('User/passwordrecovery.html', [
+                        "messageErreur" => "Une erreur c'est produite pendant la création du nouveau mot de passe, veuillez réessayer plus tard"
+                    ]);
+                }
+
+            }
+
+            View::renderTemplate('User/passwordrecovery.html');
+
+        } catch(\Exception $e){
+
+            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
+        }
+
+
     }
 }
