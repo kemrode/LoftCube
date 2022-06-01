@@ -133,10 +133,10 @@ class Articles extends Model {
         SELECT COUNT(*) as nb_art FROM articles WHERE user_id = ?');
         try{
             $stmt->execute([$id]);
-            $e = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $value = $stmt->fetch(\PDO::FETCH_ASSOC);
 
 
-            return $e;
+            return $value['nb_art'];
         } catch(\Exception $e){
 
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
@@ -150,10 +150,9 @@ class Articles extends Model {
         SELECT SUM(views) as nb_vue FROM articles WHERE user_id = ?');
         try{
             $stmt->execute([$id]);
-            $e = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $value = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-
-            return $e;
+            return $value['nb_vue'];
         } catch(\Exception $e){
 
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";

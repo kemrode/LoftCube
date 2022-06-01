@@ -149,8 +149,10 @@ class User extends \Core\Controller
     {
         try{
             $articles = Articles::getByUser($_SESSION['user']['id']);
-            $count = Articles::getcountByUser($_SESSION['user']['id']);
-            $countview = Articles::getcountviewByUser($_SESSION['user']['id']);
+            $count = is_null(Articles::getcountByUser($_SESSION['user']['id'])) ? 0 : Articles::getcountByUser($_SESSION['user']['id']);
+            $countview = is_null(Articles::getcountviewByUser($_SESSION['user']['id'])) ? 0 : Articles::getcountviewByUser($_SESSION['user']['id']);
+
+
             if(isset($_GET['arg'])&& ($_GET['arg'] == 'pop' ||($_GET['arg'] == 'rec' ))){
                 $arg =$_GET['arg'];
 
@@ -166,8 +168,8 @@ class User extends \Core\Controller
 
         View::renderTemplate('User/account.html', [
             'articles' => $articles,
-            'nb_art' => $count['nb_art'],
-            'nb_vue' => $countview['nb_vue'],
+            'nb_art' => $count,
+            'nb_vue' => $countview,
             'arg' => $arg,
 
         ]);

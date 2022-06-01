@@ -90,15 +90,6 @@ class Product extends \Core\Controller
         $id = $this->route_params['id'];
 
         try {
-            if (isset($_POST['messageMailContact']) && $_POST['messageMailContact'] <> ''){
-                //$resultSendMail = SendMail::sendOneMail('buland2001@gmail.com', 'Nouveau message concernant votre annonce !', $_POST['messageMailContact']);
-                $resultSendMail = 'OK';
-
-            } else {
-                $resultSendMail = "";
-            }
-
-
             Articles::addOneView($id);
             $suggestions = Articles::getSuggest();
             $article = Articles::getOne($id);
