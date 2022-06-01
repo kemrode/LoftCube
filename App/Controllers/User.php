@@ -25,6 +25,18 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
+//        switch ($_GET["code"]){
+//            case "errem":
+//                $messageErreur = "Erreur : l'email utilisé n'est pas conforme";
+//                break;
+//            case "errlog":
+//                $messageErreur = "Erreur : email ou mot de passe incorrect";
+//                break;
+//            default:
+//                $messageErreur = "";
+//                break;
+//        }
+
         if ((isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"]) || (isset($_SESSION['user']['username']))){
             header('Location: /');
         }
@@ -42,6 +54,7 @@ class User extends \Core\Controller
         }
 
         $valueemail = (isset($_GET["email"])) ? $_GET["email"] : "";
+
         View::renderTemplate('User/login.html',[
             'emailValue' => $valueemail
         ]);

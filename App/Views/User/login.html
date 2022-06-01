@@ -21,6 +21,14 @@
                     Connexion
                 </div>
                 <div class="l-form">
+<!--                    Affiche le message d'erreur s'il y a une erreur-->
+                    {% if messageErreur is not empty %}
+                    <span style="color: red">
+
+                        <br><br>
+                    </span>
+                    {% endif %}
+
                     <form action="/login" method="post">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
