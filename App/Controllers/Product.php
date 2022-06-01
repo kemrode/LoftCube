@@ -30,7 +30,7 @@ class Product extends \Core\Controller
                 }
             }
             $datalist.=('<datalist id="browsers">');
-echo $datalist;
+            echo $datalist;
             die();
         }
 
