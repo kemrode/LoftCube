@@ -33,8 +33,7 @@ class Product extends \Core\Controller
                     $f['user_id'] = $_SESSION['user']['id'];
                     $id = Articles::save($f);
                     $pictureName = Upload::uploadFile($_FILES['picture'], $id);
-                    var_dump("Valeur de picture name = " . $pictureName);
-                    die;
+
                     Articles::attachPicture($id, $pictureName);
 
                     if ($id != ""){
