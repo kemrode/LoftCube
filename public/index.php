@@ -10,6 +10,14 @@ use Core\View;
 
 session_start();
 
+//Récupération des variables de cookies :
+if (isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"] && !isset($_SESSION['user'])){
+    $_SESSION['user'] = array(
+        'id' => $_COOKIE['id'],
+        'username' => $_COOKIE['username']
+    );
+}
+
 /**
  * Composer
  */

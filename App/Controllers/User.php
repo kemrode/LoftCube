@@ -11,6 +11,7 @@ use \Core\View;
 use Exception;
 use http\Env\Request;
 use http\Exception\InvalidArgumentException;
+use function PHPUnit\Framework\isEmpty;
 
 /**
  * User controller
@@ -23,48 +24,26 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
-        if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
-            try{
-                $f=[
-                    'email'=>$_COOKIE['email'],
-                    'password'=>$_COOKIE['password'],
-                ];
-
-                $this->login($f);
-                header('Location: /account');
-            }catch (Exception $e){
-                echo $e;
-            }
+        if (isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"]){
+            header('Location: /');
         }
 
-        if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
-            try{
-                $f=[
-                    'email'=>$_COOKIE['email'],
-                    'password'=>$_COOKIE['password'],
-                ];
-                $this->login($f);
-                header('Location: /account');
-            }catch (Exception $e){
-                echo $e;
-            }
-        }
         if(isset($_POST['submit'])){
             try{
-                $f = $_POST;
-                if(isset($_POST['checkbox'])&&$_POST['checkbox'] == true){
-                    setcookie('visitorLogged',true,time()+86400);
-                    setcookie("email",$f['email'],time()+86400);
-                    setcookie("password",$f['password'],time()+86400);
-                }
-                $this->login($f);
                 // Si login OK, redirige vers le compte
-                header('Location: /account');
+                if ($this->login($_POST)){
+                    header('Location: /account');
+                }
+
             } catch(\Exception $e){
                 echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
             }
         }
-        View::renderTemplate('User/login.html');
+
+        $valueEmail = (isset($_POST["email"]) && !isEmpty($_POST["email"])) ? $_POST["email"] : "";
+        View::renderTemplate('User/login.html', [
+            'valueEmail' => $valueEmail
+        ]);
     }
 
     /**
@@ -72,6 +51,10 @@ class User extends \Core\Controller
      */
     public function registerAction()
     {
+        if (isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"]){
+            header('Location: /');
+        }
+
         if(isset($_GET["code"])){
             if ( $_GET['code']=='existe'){
                 echo ("<script>alert('L\'email utilisé existe déjà') </script>");
@@ -89,6 +72,7 @@ class User extends \Core\Controller
                 echo ("<script>alert('identifiants invalides') </script>");
             }
         }
+
         if(isset($_POST['submit'])){
             try {
                 $f = $_POST;
@@ -204,6 +188,13 @@ class User extends \Core\Controller
         $this->login($data);
     }
 
+    /**
+     * Login: Si l'adresse mail et le mot de passe hashé correspondent
+     * alors la fonction retourne TRUE sinon false
+     * @access public
+     * @return boolean
+     * @since 1.0.2
+     */
     private function login($data){
         try {
             if(isset($data['email']) &&( isset($data['password'])
@@ -218,12 +209,23 @@ class User extends \Core\Controller
                     return false;
                 }
 
+                //Vérification du hash
                 $user = \App\Models\User::getByLogin($data['email']);
                 if (Hash::generate($data['password'], $user['salt']) == $user['password']) {
                     $_SESSION['user'] = array(
                         'id' => $user['id'],
                         'username' => $user['username']
                     );
+
+                    //Si l'utilisateur souhaite sauvegarder sa session par cookie :
+                    if(isset($data['checkbox'])&&$data['checkbox'] == true){
+                        setcookie('visitorLogged',true,time()+60*60*24);
+                        setcookie("email",$data['email'],time()+60*60*24);
+                        setcookie("username", $_SESSION["user"]["username"],time()+60*60*24);
+                        setcookie("id", $_SESSION["user"]["id"],time()+60*60*24);
+                    }
+
+                    return true;
                 }else{
                     header('Location: /login?cod=errlog');
                     return false;
@@ -252,8 +254,12 @@ class User extends \Core\Controller
             if (isset($_COOKIE)){
                 setcookie("email","", time()-3600);
                 unset($_COOKIE['email']);
-                setcookie("password","", time()-3600);
-                unset($_COOKIE['password']);
+                setcookie("username","", time()-3600);
+                unset($_COOKIE['username']);
+                setcookie("id","", time()-3600);
+                unset($_COOKIE['id']);
+                setcookie("visitorLogged","", time()-3600);
+                unset($_COOKIE['visitorLogged']);
             }
             // Destroy all data registered to the session.
             $_SESSION = array();
