@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Utility\Regex;
 use Core\Model;
 use App\Core;
 use DateTime;
@@ -210,12 +211,10 @@ class Articles extends Model {
      * @throws Exception
      */
     public static function save($data) {
-        $regex_for_text =
-            '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
-            'script[^>]*>';
-        $data['name'] = preg_replace("#$regex_for_text#i",'',$data['name']);
-        $data['description'] = preg_replace("#$regex_for_text#i",'',$data['description']);
-        $data['city'] = preg_replace("#$regex_for_text#i",'',$data['city']);
+
+        $data['name'] = Regex::regexEmail($data['name']);
+        $data['description'] = Regex::regexEmail($data['description']);
+        $data['city'] = Regex::regexEmail($data['city']);
 
       if ( isset($data['name']) && isset($data['description']) && isset($data['user_id']) && isset($data['city'])
           && $data['name']!="" && $data['description']!="" && $data['city']!="" && $data['user_id']!="") {
