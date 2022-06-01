@@ -73,31 +73,4 @@ class User extends Model {
 
         }
     }
-
-
-    /**
-     * ?
-     * @access public
-     * @return string|boolean
-     * @throws Exception
-     */
-    public static function login() {
-
-        $db = static::getDB();
-
-        $stmt = $db->prepare('SELECT * FROM articles WHERE articles.id = ? LIMIT 1');
-        try {
-
-
-            $stmt->execute([$id]);
-
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } catch(\Exception $e){
-
-            echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
-
-        }
-    }
-
-
 }

@@ -25,17 +25,8 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
-        if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
-            try{
-                $f=[
-                    'email'=>$_COOKIE['email'],
-                    'password'=>$_COOKIE['password'],
-                ];
-                $this->login($f);
-                header('Location: /account');
-            }catch (Exception $e){
-                echo $e;
-            }
+        if (isset($_COOKIE["visitorLogged"]) && $_COOKIE["visitorLogged"]){
+            header('Location: /');
         }
 
         if(isset($_COOKIE['email'])&&isset($_COOKIE['password'])){
@@ -52,18 +43,20 @@ class User extends \Core\Controller
         }
         if(isset($_POST['submit'])){
             try{
-                $f = $_POST;
-                if(isset($_POST['checkbox'])&&$_POST['checkbox'] == true){
-                    Cookie::setCookies($f['email'],$f['password']) ;
-                }
-                $this->login($f);
                 // Si login OK, redirige vers le compte
-                header('Location: /account');
+                if ($this->login($_POST)){
+                    header('Location: /account');
+                }
+
             } catch(\Exception $e){
                 echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
             }
         }
-        View::renderTemplate('User/login.html');
+
+        $valueEmail = (isset($_POST["email"]) && !isEmpty($_POST["email"])) ? $_POST["email"] : "";
+        View::renderTemplate('User/login.html', [
+            'valueEmail' => $valueEmail
+        ]);
     }
 
     /**
@@ -128,6 +121,7 @@ class User extends \Core\Controller
                             }
                         }
                     }
+
                 }
                 // validation
             } catch(\Exception $e){
@@ -137,9 +131,6 @@ class User extends \Core\Controller
             View::renderTemplate('User/register.html');
         }
     }
-
-
-
     /**
      * Affiche la page du compte
      */
@@ -151,11 +142,15 @@ class User extends \Core\Controller
             $countview = is_null(Articles::getcountviewByUser($_SESSION['user']['id'])) ? 0 : Articles::getcountviewByUser($_SESSION['user']['id']);
             if(isset($_GET['arg'])&& ($_GET['arg'] == 'pop' ||($_GET['arg'] == 'rec' ))){
                 $arg =$_GET['arg'];
+
             }else {
                 $arg = null;
             }
+
         } catch(\Exception $e){
+
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
+
         }
 
         View::renderTemplate('User/account.html', [
@@ -163,10 +158,9 @@ class User extends \Core\Controller
             'nb_art' => $count,
             'nb_vue' => $countview,
             'arg' => $arg,
+
         ]);
     }
-
-
 
     /*
      * Fonction privée pour enregister un utilisateur
@@ -174,6 +168,8 @@ class User extends \Core\Controller
     private function register($data)
     {
         try {
+
+
             // Generate a salt, which will be applied to the during the password
             // hashing process.
             $salt = Hash::generateSalt(32);
@@ -195,13 +191,12 @@ class User extends \Core\Controller
         $this->login($data);
     }
 
-
-
     private function login($data){
         try {
             if(isset($data['email']) &&( isset($data['password'])
                     && strlen($data['password'])>7
                 ) ){
+                $email = $data['email'];
                 //regex de vérification des emails
                 $email = Regex::regexEmail($data['email']);
 
@@ -209,12 +204,23 @@ class User extends \Core\Controller
                     header('Location: /login?cod=errem');
                     return false;
                 }
-                $user = \App\Models\User::getByLogin($email);
+
+                $user = \App\Models\User::getByLogin($data['email']);
                 if (Hash::generate($data['password'], $user['salt']) == $user['password']) {
                     $_SESSION['user'] = array(
                         'id' => $user['id'],
                         'username' => $user['username']
                     );
+
+                    //Si l'utilisateur souhaite sauvegarder sa session par cookie :
+                    if(isset($data['checkbox'])&&$data['checkbox'] == true){
+                        Cookie::setCookies($data['email'],$data['password'],$_SESSION["user"]["username"], $_SESSION["user"]["id"]);
+
+                    }
+
+
+
+                    return true;
                 }else{
                     header('Location: /login?cod=errlog');
                     return false;
