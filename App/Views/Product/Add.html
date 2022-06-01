@@ -54,10 +54,18 @@
                                     <label for="e2">Ville</label>
                                     {% if ville is  null %}
 
-                                    <input class="form-control cityAutoComplete"  name="city" type="text" autocomplete="on"/>
+                                    <input list="browsers"  class="form-control cityAutoComplete" id="search-box"  name="city" type="text" autocomplete="on"/>
+
+                                    <div id="suggesstion-box"></div>
+
+
+
                                     {% else %}
 
-                                    <input class="form-control cityAutoComplete" value="{{ville}}" name="city" type="text" autocomplete="on"/>
+                                    <input class="form-control cityAutoComplete" id="search-box" value="{{ville}}" name="city" type="text" autocomplete="on"/>
+                                    <div id="suggesstion-box"></div>
+
+
                                     {% endif %}
 
                                 </div>
@@ -90,21 +98,32 @@
 
 {% block javascript %}
     <script type="text/javascript">
-        $('.cityAutoComplete').autoComplete({
-            resolver: 'custom',
-            events: {
-                search: function (qry, callback) {
-                    // let's do a custom ajax call
-                    $.ajax(
-                        '/api/cities',
-                        {
-                            data: { 'query': qry}
-                        }
-                    ).done(function (res) {
-                        callback(res)
-                    });
-                }
-            }
+        $(document).ready(function(){
+            $("#search-box").keyup(function(){
+
+                console.log('keyword='+$(this).val())
+
+                $.ajax({
+                    type: "POST",
+                    url: "/product",
+                    data:'keyword='+$(this).val(),
+
+                    beforeSend: function(){
+                        $("#search-box").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                    },
+
+                    success: function(data){
+                        $("#suggesstion-box").show();
+                        $("#suggesstion-box").html(data);
+                        $("#search-box").css("background","#FFF");
+                    }
+                });
+            });
         });
+
+        function selectCountry(val) {
+            $("#search-box").val(val);
+            $("#suggesstion-box").hide();
+        }
     </script>
 {% endblock %}

@@ -184,7 +184,24 @@ class Articles extends Model {
 
         }
     }
+    public static function autocomplete($data)
+    {
+            $db = static::getDB();
+            $sql = "SELECT ville_nom_reel FROM villes_france WHERE ville_nom_reel like  :city limit 3;";
+            $stmt = $db->prepare($sql);
+            $city = $data . "%";
 
+            $stmt->bindParam("city", $city);
+
+            try {
+                $stmt->execute();
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            } catch (\Exception $e) {
+                echo $e;
+            }
+
+
+    }
 
 
     /**
