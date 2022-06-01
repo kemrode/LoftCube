@@ -35,8 +35,8 @@ class Config
     const DB_PASSWORD = '';
 
     /**
-     * Show or hide error messages on screen
+     * Affiche une belle page d'erreur si TRUE, affiche les details de l'erreur si false (Pour le dev)
      * @var boolean
      */
-    const SHOW_ERRORS = true;
+    const SHOW_ERRORS = false;
 }

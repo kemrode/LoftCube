@@ -50,6 +50,7 @@ echo $datalist;
                     $f['user_id'] = $_SESSION['user']['id'];
                     $id = Articles::save($f);
                     $pictureName = Upload::uploadFile($_FILES['picture'], $id);
+
                     Articles::attachPicture($id, $pictureName);
 
                     if ($id != ""){
@@ -72,6 +73,7 @@ echo $datalist;
             }
             catch
             (\Exception $e){
+                throw new \Exception("Une erreur c'est produite. Détail de l'erreur : " . $e);
             }
         }else{
             View::renderTemplate('Product/Add.html');
