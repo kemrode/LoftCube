@@ -11,6 +11,7 @@ use \Core\View;
 use Exception;
 use http\Env\Request;
 use http\Exception\InvalidArgumentException;
+use App\Utility\Regex;
 
 /**
  * User controller
@@ -94,8 +95,8 @@ class User extends \Core\Controller
                 $f = $_POST;
                 $email = $f['email'];
                 //regex de vérification des emails
-                $regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
-                $email = (preg_match($regex, $email))?$email:"invalid email";
+                $email = Regex::regexEmail($email);
+
                 if($email == 'invalid email'){
                     header('Location: /register?code=errem');
                     die();
@@ -108,10 +109,7 @@ class User extends \Core\Controller
                         header('Location: /register?code=mdpc');
                         die();
                     }else{
-                        $regex_for_text =
-                            '<[\n\r\s]*script[^>]*[\n\r\s]*(type\s?=\s?"text/javascript")*>.*?<[\n\r\s]*/' .
-                            'script[^>]*>';
-                        $f['username'] = preg_replace("#$regex_for_text#i",'',$f['username']);
+                        $f['username']= Regex::regexAntiScript($f['username']) ;
 
                         if($f['username'] == "" || $f['username'] ==" "){
                             header('Location: /register?code=idf');
@@ -132,7 +130,6 @@ class User extends \Core\Controller
                             }
                         }
                     }
-
                 }
                 // validation
             } catch(\Exception $e){
@@ -151,19 +148,13 @@ class User extends \Core\Controller
             $articles = Articles::getByUser($_SESSION['user']['id']);
             $count = is_null(Articles::getcountByUser($_SESSION['user']['id'])) ? 0 : Articles::getcountByUser($_SESSION['user']['id']);
             $countview = is_null(Articles::getcountviewByUser($_SESSION['user']['id'])) ? 0 : Articles::getcountviewByUser($_SESSION['user']['id']);
-
-
             if(isset($_GET['arg'])&& ($_GET['arg'] == 'pop' ||($_GET['arg'] == 'rec' ))){
                 $arg =$_GET['arg'];
-
             }else {
                 $arg = null;
             }
-
         } catch(\Exception $e){
-
             echo "<script>console.log('Debug Objects: " . $e . "' );</script>";
-
         }
 
         View::renderTemplate('User/account.html', [
@@ -171,18 +162,14 @@ class User extends \Core\Controller
             'nb_art' => $count,
             'nb_vue' => $countview,
             'arg' => $arg,
-
         ]);
     }
-
     /*
      * Fonction privée pour enregister un utilisateur
      */
     private function register($data)
     {
         try {
-
-
             // Generate a salt, which will be applied to the during the password
             // hashing process.
             $salt = Hash::generateSalt(32);
@@ -209,16 +196,15 @@ class User extends \Core\Controller
             if(isset($data['email']) &&( isset($data['password'])
                     && strlen($data['password'])>7
                 ) ){
-                $email = $data['email'];
                 //regex de vérification des emails
-                $regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
-                $email = (preg_match($regex, $email))?$email:"invalid email";
+                $email = Regex::regexEmail($data['email']);
+
                 if($email == 'invalid email'){
                     header('Location: /login?cod=errem');
                     return false;
                 }
 
-                $user = \App\Models\User::getByLogin($data['email']);
+                $user = \App\Models\User::getByLogin($email);
                 if (Hash::generate($data['password'], $user['salt']) == $user['password']) {
                     $_SESSION['user'] = array(
                         'id' => $user['id'],
