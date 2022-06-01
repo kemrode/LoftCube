@@ -18,6 +18,7 @@ function showPosition(position) {
     GetLocalisationOfCity().then((response) => {
        let feature = response.features['0'];
        let context = feature.context;
+       console.log(context);
        for(var item of context){
            var idFind = item.id;
            if(idFind.includes("place.")){
