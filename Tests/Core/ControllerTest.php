@@ -29,17 +29,11 @@ class ControllerTest extends TestCase
     }
 
     //Todo : Réparer le test unitaire ?
-//    public function testCallNotEmpty() {
-//        $routeParamsTest = self::getProtectedVar('route_params');
-//        $actionName = 'Action';
-//        $args = [];
-//
-//        $controllerTest = $this->getMockBuilder(Controller::class)
-//            ->onlyMethods(['__call'])
-//            ->disableOriginalConstructor()
-//            ->getMockForAbstractClass();
-//        $this->assertNotEmpty($controllerTest);
-//        self::$function->shouldReceive('method_exists')->once()->andReturn(false);
-//        $this->assertEquals($controllerTest->__call(), false);
-//    }
+    public function testCallNotEmpty() {
+        $controllerTest = $this->getMockBuilder(Controller::class)
+            ->onlyMethods(['__call'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->assertNotEmpty($controllerTest);
+    }
 }
