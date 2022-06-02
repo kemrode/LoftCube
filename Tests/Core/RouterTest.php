@@ -31,9 +31,6 @@ class RouterTest extends TestCase
 
     public function testAdd()
     {
-        $route = 'App\Controllers\tests';
-        $param = [];
-
         $client = $this->getMockBuilder(Router::class)
             ->onlyMethods(['add'])
             ->disableOriginalConstructor()
@@ -66,9 +63,5 @@ class RouterTest extends TestCase
             ->getMock();
         $removeQueryStringVariables = self::haveMethod('removeQueryStringVariables');
         $this->assertSame($testResult, $removeQueryStringVariables->invokeArgs(new Router(), [$testString]));
-//        $client->expects($this->once())
-//            ->method('removeQueryStringVariables')
-//            ->with($this->equalTo($testResult));
-//        $this->assertSame($testResult, $client);
     }
 }
